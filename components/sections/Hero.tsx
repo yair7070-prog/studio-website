@@ -64,7 +64,7 @@ export function Hero({ positioning, cta, imageAlt }: HeroContent) {
           className="absolute inset-x-0 bottom-0 h-1/3 pointer-events-none"
           style={{
             background:
-              'linear-gradient(to bottom, rgba(43,36,32,0) 0%, rgba(43,36,32,0.12) 100%)',
+              'linear-gradient(to bottom, rgba(43,36,32,0) 0%, rgba(43,36,32,0.22) 100%)',
           }}
         />
       </div>
@@ -124,7 +124,7 @@ export function Hero({ positioning, cta, imageAlt }: HeroContent) {
           initial={{ opacity: 0, y: 20 }}
           animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6, delay: 0.6, ease: EASE }}
-          className="font-serif text-display-xl text-espresso mb-8"
+          className="font-serif text-display-xl text-bone mb-8"
         >
           {positioning}
         </motion.h1>
@@ -133,17 +133,17 @@ export function Hero({ positioning, cta, imageAlt }: HeroContent) {
           initial={{ opacity: 0 }}
           animate={ready ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 0.6, delay: 0.9, ease: EASE }}
-          className="group relative inline-block font-serif text-body-l text-espresso py-3 px-2 -mx-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-walnut focus-visible:ring-offset-2 focus-visible:ring-offset-mushroom"
+          className="group relative inline-block font-serif text-body-l text-bone py-3 px-2 -mx-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-walnut focus-visible:ring-offset-2 focus-visible:ring-offset-mushroom"
         >
           {cta}
           {/* Underline draws from reading-start (right in RTL) */}
-          <span className="absolute -bottom-px start-0 h-px w-0 bg-espresso group-hover:w-full transition-[width] duration-300 ease-paper motion-reduce:transition-none" />
+          <span className="absolute -bottom-px start-0 h-px w-0 bg-bone group-hover:w-full transition-[width] duration-300 ease-paper motion-reduce:transition-none" />
         </motion.a>
       </motion.div>
 
       {/* ── Scroll indicator — thin vertical tick at bottom centre ── */}
       <motion.div
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 w-px bg-taupe opacity-40 origin-top"
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 w-px bg-bone opacity-30 origin-top"
         initial={{ scaleY: 0 }}
         animate={ready ? { scaleY: 1 } : { scaleY: 0 }}
         transition={{ duration: 0.5, delay: 1.2, ease: EASE }}

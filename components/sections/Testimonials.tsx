@@ -69,7 +69,7 @@ export function Testimonials({ eyebrow, items }: TestimonialsContent) {
           {/* Decorative opening quote — pulses on each slide change */}
           <motion.span
             ref={quoteRef}
-            className="block font-latin text-[6rem] leading-none text-walnut/20 select-none mb-2"
+            className="block font-latin text-[6rem] leading-none text-walnut/30 select-none mb-2"
             aria-hidden="true"
             initial={reduced ? { opacity: 1, y: 0 } : { opacity: 0, y: -8 }}
             animate={quoteControls}

@@ -68,7 +68,7 @@ export function Process({ eyebrow, stages }: ProcessContent) {
                 {/* Number — dir=ltr so "01" stays left-to-right inside RTL */}
                 <span
                   dir="ltr"
-                  className="tabular-nums font-latin font-light text-walnut leading-none flex-shrink-0 min-w-[100px] text-[5rem] tracking-[-0.02em]"
+                  className="tabular-nums font-latin font-light text-walnut leading-none flex-shrink-0 min-w-[100px] text-[5rem] tracking-[0]"
                 >
                   {stage.number}
                 </span>

@@ -49,7 +49,7 @@ export function About({ paragraph, portraitAlt, signature, tagline }: AboutConte
               {paragraph}
             </p>
             <p
-              className="mt-12 font-latin font-light text-display-l text-walnut tracking-[0.02em]"
+              className="mt-12 font-latin font-light text-display-l text-walnut tracking-[0.04em]"
               aria-label={signature}
             >
               {signature}
