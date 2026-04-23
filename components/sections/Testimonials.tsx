@@ -26,14 +26,16 @@ export function Testimonials({ eyebrow, items }: TestimonialsContent) {
   }, [multi, reduced, paused, advance])
 
   return (
-    <section className="bg-bone py-section-lg">
+    <section className="bg-bone py-section-lg" aria-labelledby="testimonials-heading">
       <div className="max-w-container mx-auto px-[6vw]">
-        <p className="text-small text-taupe tracking-[0.08em] mb-24">{eyebrow}</p>
+        <h2 id="testimonials-heading" className="text-small text-taupe tracking-[0.08em] mb-24">{eyebrow}</h2>
 
         <div
           className="max-w-[680px] mx-auto text-center"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
+          onFocus={() => setPaused(true)}
+          onBlur={() => setPaused(false)}
         >
           <AnimatePresence mode="wait">
             <motion.div

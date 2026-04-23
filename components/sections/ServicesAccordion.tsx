@@ -26,7 +26,7 @@ export function ServicesAccordion({ eyebrow, items }: ServicesContent) {
   const reduced = useReducedMotion()
 
   return (
-    <section className="bg-sand py-section-lg">
+    <section className="bg-sand py-section-lg" aria-labelledby="services-heading">
       <div className="max-w-container mx-auto px-[6vw]">
 
         <motion.div
@@ -35,9 +35,9 @@ export function ServicesAccordion({ eyebrow, items }: ServicesContent) {
           whileInView="visible"
           viewport={{ once: true, margin: '-15%' }}
         >
-          <motion.p variants={revealItem} className="text-small text-taupe tracking-[0.08em] mb-12">
+          <motion.h2 id="services-heading" variants={revealItem} className="text-small text-taupe tracking-[0.08em] mb-12">
             {eyebrow}
-          </motion.p>
+          </motion.h2>
 
           <Accordion.Root type="single" collapsible className="border-t border-mushroom">
             {items.map((item) => (
@@ -47,7 +47,7 @@ export function ServicesAccordion({ eyebrow, items }: ServicesContent) {
                   className="border-b border-mushroom transition-colors duration-[400ms] ease-paper data-[state=open]:bg-mushroom/30"
                 >
                   <Accordion.Header className="flex">
-                    <Accordion.Trigger className="group relative flex w-full items-center justify-between py-8 md:py-10 text-start focus:outline-none">
+                    <Accordion.Trigger className="group relative flex w-full items-center justify-between py-8 md:py-10 text-start focus:outline-none focus-visible:ring-2 focus-visible:ring-walnut focus-visible:ring-offset-2 focus-visible:ring-offset-sand">
 
                       {/* Title — reading-start (right in RTL) */}
                       <span className="font-serif text-headline-m text-espresso group-hover:text-walnut transition-colors duration-200 ease-paper">

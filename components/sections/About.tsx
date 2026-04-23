@@ -19,7 +19,8 @@ export function About({ paragraph, portraitAlt, signature, tagline }: AboutConte
   const initial = reduced ? 'visible' : 'hidden'
 
   return (
-    <section className="bg-bone py-section-lg">
+    <section className="bg-bone py-section-lg" aria-labelledby="about-heading">
+      <h2 id="about-heading" className="sr-only">על הסטודיו</h2>
       <div className="max-w-container mx-auto px-[6vw]">
         {/*
           RTL 12-col grid: col line 1 = right edge.

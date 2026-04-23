@@ -64,7 +64,7 @@ export function FinalCTA({
   }
 
   return (
-    <section id="lead-form" className="bg-sand py-section-xl">
+    <section id="lead-form" className="bg-sand py-section-xl" aria-labelledby="lead-form-title">
       <div className="max-w-container mx-auto px-[6vw]">
 
         <motion.p
@@ -78,6 +78,7 @@ export function FinalCTA({
         </motion.p>
         <div className="mt-12" />
         <motion.h2
+          id="lead-form-title"
           className="font-serif text-display-xl text-espresso"
           initial={reduced ? { opacity: 1 } : { opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -218,14 +219,14 @@ export function FinalCTA({
                     href={form.whatsapp.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group relative inline-block font-serif text-body-m text-espresso"
+                    className="group relative inline-block font-serif text-body-m text-espresso focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-walnut focus-visible:ring-offset-2 focus-visible:ring-offset-sand"
                   >
                     {form.whatsapp.label}
                     <span className="absolute -bottom-px start-0 h-px w-0 bg-espresso group-hover:w-full transition-[width] duration-300 ease-paper motion-reduce:transition-none" />
                   </a>
                   <a
                     href={form.phone.href}
-                    className="group relative inline-block font-serif text-body-m text-espresso"
+                    className="group relative inline-block font-serif text-body-m text-espresso focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-walnut focus-visible:ring-offset-2 focus-visible:ring-offset-sand"
                   >
                     {form.phone.label}
                     <span className="absolute -bottom-px start-0 h-px w-0 bg-espresso group-hover:w-full transition-[width] duration-300 ease-paper motion-reduce:transition-none" />

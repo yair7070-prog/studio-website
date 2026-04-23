@@ -28,13 +28,13 @@ export function Footer({ region, phone, phoneHref, email, instagram, copyright }
             <span className="text-small text-taupe">{region}</span>
             <a
               href={phoneHref}
-              className="text-small text-taupe hover:text-walnut transition-colors duration-300 ease-paper py-2 -my-1"
+              className="text-small text-taupe hover:text-walnut transition-colors duration-300 ease-paper py-2 -my-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-walnut focus-visible:ring-offset-2 focus-visible:ring-offset-bone"
             >
               <span dir="ltr" className="tabular-nums">{phone}</span>
             </a>
             <a
               href={`mailto:${email}`}
-              className="text-small text-taupe hover:text-walnut transition-colors duration-300 ease-paper py-2 -my-1"
+              className="text-small text-taupe hover:text-walnut transition-colors duration-300 ease-paper py-2 -my-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-walnut focus-visible:ring-offset-2 focus-visible:ring-offset-bone"
             >
               {email}
             </a>
@@ -51,7 +51,7 @@ export function Footer({ region, phone, phoneHref, email, instagram, copyright }
             href={instagram}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 text-small text-taupe hover:text-walnut transition-colors duration-300 ease-paper py-2"
+            className="flex items-center gap-2 text-small text-taupe hover:text-walnut transition-colors duration-300 ease-paper py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-walnut focus-visible:ring-offset-2 focus-visible:ring-offset-bone"
           >
             <span dir="ltr">@a.w_interiordesign_</span>
             <svg

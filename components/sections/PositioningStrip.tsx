@@ -19,7 +19,8 @@ export function PositioningStrip({ statements }: PositioningStripContent) {
   const reduced = useReducedMotion()
 
   return (
-    <section className="bg-bone py-section-sm">
+    <section className="bg-bone py-section-sm" aria-labelledby="positioning-heading">
+      <h2 id="positioning-heading" className="sr-only">עקרוני הסטודיו</h2>
       <div className="max-w-container mx-auto px-[6vw]">
         <motion.ul
           className="flex flex-col gap-12 md:flex-row md:justify-between md:gap-16 list-none m-0 p-0"

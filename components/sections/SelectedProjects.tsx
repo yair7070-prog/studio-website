@@ -123,9 +123,10 @@ export function SelectedProjects({ eyebrow, items }: ProjectsContent) {
   }, [openProject])
 
   return (
-    <section className="bg-bone py-section-lg">
+    <section className="bg-bone py-section-lg" aria-labelledby="projects-heading">
       <div className="max-w-container mx-auto px-[6vw]">
-        <motion.p
+        <motion.h2
+          id="projects-heading"
           className="text-small text-taupe tracking-[0.08em] mb-16"
           initial={reduced ? { opacity: 1 } : { opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -133,7 +134,7 @@ export function SelectedProjects({ eyebrow, items }: ProjectsContent) {
           transition={{ duration: 0.5, ease: EASE }}
         >
           {eyebrow}
-        </motion.p>
+        </motion.h2>
 
         {/*
           RTL 2-col grid: col 1 = right (reading-start), col 2 = left (reading-end).

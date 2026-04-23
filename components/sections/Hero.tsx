@@ -79,7 +79,7 @@ export function Hero({ positioning, cta, imageAlt, imageLabel }: HeroContent) {
           initial={{ opacity: 0 }}
           animate={ready ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 0.6, delay: 0.9, ease: EASE }}
-          className="group relative inline-block font-serif text-body-l text-espresso py-3 px-2 -mx-2"
+          className="group relative inline-block font-serif text-body-l text-espresso py-3 px-2 -mx-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-walnut focus-visible:ring-offset-2 focus-visible:ring-offset-mushroom"
         >
           {cta}
           {/* Underline draws from reading-start (right in RTL) leftward */}

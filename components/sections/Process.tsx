@@ -12,9 +12,9 @@ export function Process({ eyebrow, stages }: ProcessContent) {
   const reduced = useReducedMotion()
 
   return (
-    <section className="bg-sand py-section-lg">
+    <section className="bg-sand py-section-lg" aria-labelledby="process-heading">
       <div className="max-w-container mx-auto px-[6vw]">
-        <p className="text-small text-taupe tracking-[0.08em] mb-16">{eyebrow}</p>
+        <h2 id="process-heading" className="text-small text-taupe tracking-[0.08em] mb-16">{eyebrow}</h2>
 
         <div className="flex flex-col">
           {stages.map((stage, index) => (
