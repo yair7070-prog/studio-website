@@ -1,9 +1,14 @@
-import { Wordmark } from '@/components/brand/Wordmark'
+import { Hero } from '@/components/sections/Hero'
+import { PositioningStrip } from '@/components/sections/PositioningStrip'
+import { Footer } from '@/components/sections/Footer'
+import { hero, positioningStrip, footer } from '@/lib/content/home'
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen flex items-center justify-center">
-      <Wordmark />
+    <main>
+      <Hero {...hero} />
+      <PositioningStrip {...positioningStrip} />
+      <Footer {...footer} />
     </main>
   )
 }
