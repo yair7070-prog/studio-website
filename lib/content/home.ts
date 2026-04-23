@@ -114,3 +114,147 @@ export const services: ServicesContent = {
     },
   ],
 }
+
+// ─── Wave 4 ──────────────────────────────────────────────
+
+export interface ProjectLabel {
+  text: string
+  variant: 'rendering' | 'in-progress' | 'nearing-completion' | 'completed'
+}
+
+export interface ProjectItem {
+  id: string
+  name: string
+  metadata: string
+  label: ProjectLabel
+  coverAlt: string
+  description: string
+}
+
+export interface ProjectsContent {
+  eyebrow: string
+  items: ProjectItem[]
+}
+
+export interface ProcessStage {
+  number: string
+  title: string
+  description: string
+}
+
+export interface ProcessContent {
+  eyebrow: string
+  stages: ProcessStage[]
+}
+
+export interface TestimonialItem {
+  id: string
+  text: string
+  name: string
+  location: string
+  year: string
+}
+
+export interface TestimonialsContent {
+  eyebrow: string
+  items: TestimonialItem[]
+}
+
+export const projects: ProjectsContent = {
+  eyebrow: 'פרויקטים נבחרים',
+  items: [
+    {
+      id: 'apartment-tel-aviv',
+      name: 'דירה בצפון תל אביב',
+      metadata: 'תל אביב, 2025',
+      label: { text: 'הדמיה', variant: 'rendering' },
+      coverAlt: 'הדמיה של סלון בדירה בתל אביב',
+      description:
+        'דירת קבלן בת ארבעה חדרים בפרויקט חדש. עבודה על שינויי קבלן מוקדמים, תכנון המטבח והחללים הציבוריים, ובחירת חומרים וטקסטיל.',
+    },
+    {
+      id: 'house-hasharon',
+      name: 'בית פרטי בשרון',
+      metadata: 'כפר שמריהו, בתכנון',
+      label: { text: 'בתכנון', variant: 'in-progress' },
+      coverAlt: 'הדמיה של כניסה לבית פרטי',
+      description:
+        'בית משפחתי בן שתי קומות. ליווי מלא מתכנון ראשוני ועד ביצוע, עם דגש על שילוב בין חללים פתוחים ופרטיות.',
+    },
+    {
+      id: 'apartment-herzliya',
+      name: 'דירה בהרצליה פיתוח',
+      metadata: 'הרצליה, לקראת סיום',
+      label: { text: 'לקראת סיום', variant: 'nearing-completion' },
+      coverAlt: 'מבט על סלון בהרצליה',
+      description:
+        'שיפוץ מקיף של דירת גן קיימת. פתיחת חללים, החלפת רצפות, תכנון מטבח מחדש ועיצוב מלא של הריהוט והטקסטיל.',
+    },
+    {
+      id: 'apartment-raanana',
+      name: 'דירה ברעננה',
+      metadata: 'רעננה, הושלם 2024',
+      label: { text: 'פרויקט שהושלם', variant: 'completed' },
+      coverAlt: 'סלון דירה מעוצבת ברעננה',
+      description:
+        'דירת חמישה חדרים. עבודה מול זוג צעיר עם ילדים, דגש על פרקטיות, טקסטורות חמות, וחללים גמישים לשינוי לאורך השנים.',
+    },
+  ],
+}
+
+export const process: ProcessContent = {
+  eyebrow: 'תהליך העבודה',
+  stages: [
+    {
+      number: '01',
+      title: 'היכרות',
+      description:
+        'שיחה ראשונית ופגישה בבית או בתוכניות. אני מקשיבה לצרכים, להעדפות של שני בני הזוג, ולחיים שאתם רוצים לנהל בבית. יוצאים עם הבנה משותפת של הפרויקט.',
+    },
+    {
+      number: '02',
+      title: 'קונספט ותכנון',
+      description:
+        'הצגת שפה עיצובית, תכנון חללים, פריסות ריהוט, ובחירת חומרים ראשונית. כל החלטה מוסברת ומוצגת בהקשר של הבית כולו, לא כבחירה מבודדת.',
+    },
+    {
+      number: '03',
+      title: 'תכנון מפורט וביצוע',
+      description:
+        'תוכניות עבודה מפורטות, מפרטים, בחירות סופיות של חומרים, ריהוט וטקסטיל. תיאום מלא מול הקבלן ובעלי המקצוע, עם ביקורים קבועים באתר.',
+    },
+    {
+      number: '04',
+      title: 'ליווי עד המפתח',
+      description:
+        'אני נשארת לצדכם עד יום הכניסה. סידור סופי, התאמות אחרונות, וליווי אישי לכל שאלה שעולה בשלב הזה. הבית מסונכרן ומוכן לחיים שלכם.',
+    },
+  ],
+}
+
+export const testimonials: TestimonialsContent = {
+  eyebrow: 'ממטופלים',
+  items: [
+    {
+      id: 't1',
+      text: 'איילת הצליחה לגשר בינינו בלי לוותר לאחד מאיתנו. היא הקשיבה באמת, וההחלטות הסופיות הרגישו כאילו אנחנו קיבלנו אותן יחד איתה, לא כפו עלינו.',
+      name: 'ש׳ ונ׳',
+      location: 'הרצליה',
+      year: '2024',
+    },
+    {
+      id: 't2',
+      text: 'לא היה רגע אחד בתהליך שבו לא ידענו מה קורה ולמה. היא מסבירה כל בחירה, וזה מה שעשה את כל ההבדל.',
+      name: 'ד׳',
+      location: 'רעננה',
+      year: '2024',
+    },
+    {
+      id: 't3',
+      text: 'הבית שלנו הרגיש כמו שלנו מהרגע שנכנסנו. לא מוזה עיצובית, לא משהו שצולם למגזין. שלנו ממש.',
+      name: 'ע׳ ור׳',
+      location: 'תל אביב',
+      year: '2023',
+    },
+  ],
+}

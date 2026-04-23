@@ -34,3 +34,8 @@
     animation-iteration-count: 1 !important;
   }
 }
+
+@keyframes progress-fill {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
