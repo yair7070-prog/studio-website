@@ -40,7 +40,7 @@ export function Footer({ region, phone, phoneHref, email, instagram, copyright }
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-small text-taupe hover:text-walnut transition-colors duration-300 ease-paper"
           >
-            @a.w_interiordesign_
+            <span dir="ltr">@a.w_interiordesign_</span>
             <svg
               width="16"
               height="16"

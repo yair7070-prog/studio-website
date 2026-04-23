@@ -209,7 +209,7 @@ export const finalCTA: FinalCTAContent = {
           { value: 'exploring', label: 'עדיין בוחנת אפשרויות' },
         ],
       },
-      size:    { label: 'מטר"ר משוער', optional: true },
+      size:    { label: 'מטר״ר משוער', optional: true },
       message: { label: 'ספרו לי על הפרויקט', optional: true },
     },
     submit:           'שליחה',
@@ -352,7 +352,7 @@ export const testimonials: TestimonialsContent = {
   items: [
     {
       id: 't1',
-      text: 'איילת הצליחה לגשר בינינו בלי לוותר לאחד מאיתנו. היא הקשיבה באמת, וההחלטות הסופיות הרגישו כאילו אנחנו קיבלנו אותן יחד איתה, לא כפו עלינו.',
+      text: 'עדי הצליחה לגשר בינינו בלי לוותר לאחד מאיתנו. היא הקשיבה באמת, וההחלטות הסופיות הרגישו כאילו אנחנו קיבלנו אותן יחד איתה, לא כפו עלינו.',
       name: 'ש׳ ונ׳',
       location: 'הרצליה',
       year: '2024',

@@ -47,7 +47,7 @@ export function Testimonials({ eyebrow, items }: TestimonialsContent) {
                 {item.text}
               </p>
               <p className="mt-12 text-small text-taupe">
-                {item.name} · {item.location} · {item.year}
+                {item.name} · {item.location} · <span dir="ltr" className="tabular-nums">{item.year}</span>
               </p>
             </motion.div>
           </AnimatePresence>
