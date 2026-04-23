@@ -61,7 +61,7 @@ export function Testimonials({ eyebrow, items }: TestimonialsContent) {
                   onClick={() => setIndex(i => (i - 1 + items.length) % items.length)}
                   onFocus={() => setPaused(true)}
                   onBlur={() => setPaused(false)}
-                  className="flex items-center justify-center w-8 h-8 text-taupe hover:text-walnut transition-colors duration-300 ease-paper focus:outline-none focus-visible:ring-2 focus-visible:ring-walnut focus-visible:ring-offset-2"
+                  className="flex items-center justify-center w-11 h-11 text-taupe hover:text-walnut transition-colors duration-300 ease-paper focus:outline-none focus-visible:ring-2 focus-visible:ring-walnut focus-visible:ring-offset-2"
                 >
                   <svg width="8" height="14" viewBox="0 0 8 14" fill="none" aria-hidden="true">
                     <path d="M1 1L7 7L1 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -72,7 +72,7 @@ export function Testimonials({ eyebrow, items }: TestimonialsContent) {
                   onClick={() => setIndex(i => (i + 1) % items.length)}
                   onFocus={() => setPaused(true)}
                   onBlur={() => setPaused(false)}
-                  className="flex items-center justify-center w-8 h-8 text-taupe hover:text-walnut transition-colors duration-300 ease-paper focus:outline-none focus-visible:ring-2 focus-visible:ring-walnut focus-visible:ring-offset-2"
+                  className="flex items-center justify-center w-11 h-11 text-taupe hover:text-walnut transition-colors duration-300 ease-paper focus:outline-none focus-visible:ring-2 focus-visible:ring-walnut focus-visible:ring-offset-2"
                 >
                   <svg width="8" height="14" viewBox="0 0 8 14" fill="none" aria-hidden="true">
                     <path d="M7 1L1 7L7 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
