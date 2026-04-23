@@ -1,6 +1,11 @@
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+'use client'
+
+import { motion, type HTMLMotionProps } from 'framer-motion'
+
+interface ButtonProps extends Omit<HTMLMotionProps<'button'>, 'children'> {
   loading?: boolean
   loadingLabel?: string
+  children?: React.ReactNode
 }
 
 export function Button({
@@ -11,16 +16,20 @@ export function Button({
   disabled,
   ...rest
 }: ButtonProps) {
+  const isDisabled = disabled || loading
+
   return (
-    <button
-      disabled={disabled || loading}
+    <motion.button
+      disabled={isDisabled}
+      whileTap={!isDisabled ? { scale: 0.97 } : undefined}
+      transition={{ duration: 0.1, ease: [0.22, 0.61, 0.36, 1] }}
       className={[
         'bg-clay text-bone py-4 px-12 font-serif text-body-m',
-        'transition-[background-color,transform] duration-300 ease-paper',
+        'transition-[background-color] duration-300 ease-paper',
         'hover:bg-walnut',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-walnut focus-visible:ring-offset-2 focus-visible:ring-offset-sand',
-        'active:translate-y-[1px]',
-        'disabled:bg-stone disabled:text-taupe disabled:cursor-not-allowed disabled:translate-y-0',
+        'disabled:bg-stone disabled:text-taupe disabled:cursor-not-allowed',
+        'will-change-transform cursor-pointer',
         className,
       ]
         .filter(Boolean)
@@ -28,6 +37,6 @@ export function Button({
       {...rest}
     >
       {loading ? loadingLabel : children}
-    </button>
+    </motion.button>
   )
 }

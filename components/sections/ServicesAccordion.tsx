@@ -47,7 +47,7 @@ export function ServicesAccordion({ eyebrow, items }: ServicesContent) {
                   className="border-b border-mushroom transition-colors duration-[400ms] ease-paper data-[state=open]:bg-mushroom/30"
                 >
                   <Accordion.Header className="flex">
-                    <Accordion.Trigger className="group relative flex w-full items-center justify-between py-8 md:py-10 text-start focus:outline-none focus-visible:ring-2 focus-visible:ring-walnut focus-visible:ring-offset-2 focus-visible:ring-offset-sand">
+                    <Accordion.Trigger className="group relative flex w-full items-center justify-between py-8 md:py-10 text-start focus:outline-none focus-visible:ring-2 focus-visible:ring-walnut focus-visible:ring-offset-2 focus-visible:ring-offset-sand cursor-pointer">
 
                       {/* Title — reading-start (right in RTL) */}
                       <span className="font-serif text-headline-m text-espresso group-hover:text-walnut transition-colors duration-200 ease-paper">
@@ -59,26 +59,24 @@ export function ServicesAccordion({ eyebrow, items }: ServicesContent) {
                         {item.teaser}
                       </span>
 
-                      {/* Icon — reading-end (left in RTL), rotates on open */}
+                      {/* Plus → × icon — reading-end (left in RTL), rotates 45° on open */}
                       <span
                         className="ms-6 flex-shrink-0 text-taupe group-hover:text-walnut group-data-[state=open]:rotate-45 group-data-[state=open]:text-walnut motion-reduce:transition-none"
-                        style={{ transition: 'transform 500ms cubic-bezier(0.22, 0.61, 0.36, 1), color 200ms cubic-bezier(0.22, 0.61, 0.36, 1)' }}
+                        style={{
+                          transition:
+                            'transform 500ms cubic-bezier(0.22, 0.61, 0.36, 1), color 200ms cubic-bezier(0.22, 0.61, 0.36, 1)',
+                        }}
                         aria-hidden="true"
                       >
-                        <svg
-                          width="24"
-                          height="2"
-                          viewBox="0 0 24 2"
-                          fill="none"
-                        >
+                        {/* 16×16 plus — rotated 45° it becomes × */}
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                           <line
-                            x1="0"
-                            y1="1"
-                            x2="24"
-                            y2="1"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
+                            x1="8" y1="0" x2="8" y2="16"
+                            stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
+                          />
+                          <line
+                            x1="0" y1="8" x2="16" y2="8"
+                            stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
                           />
                         </svg>
                       </span>

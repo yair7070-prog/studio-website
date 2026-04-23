@@ -14,7 +14,35 @@
       scroll-behavior: auto;
     }
   }
+
+  /* Balanced headings — prevents awkward line breaks */
+  h1, h2, h3, h4 {
+    text-wrap: balance;
+  }
+
+  /* Brand selection colour */
+  ::selection {
+    background-color: #8B6B4A;
+    color: #F4EFE8;
+  }
+
+  /* Thin, brand-tinted scrollbar (Chrome / Edge / Safari) */
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: #B8AE9F;
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #8B6B4A;
+  }
 }
+
+/* ─── Accordion ───────────────────────────────────────────── */
 
 @keyframes accordion-down {
   from { height: 0; }
@@ -41,6 +69,8 @@
     animation-iteration-count: 1 !important;
   }
 }
+
+/* ─── Testimonials progress bar ──────────────────────────── */
 
 @keyframes progress-fill {
   from { width: 0%; }

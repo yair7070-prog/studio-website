@@ -1,7 +1,8 @@
 import type { Metadata, Viewport } from 'next'
 import { davidLibre, assistant, cormorantGaramond, inter } from '@/lib/fonts'
-import { IntroLoader } from '@/components/brand/IntroLoader'
-import { Cursor }      from '@/components/ui/Cursor'
+import { IntroLoader }    from '@/components/brand/IntroLoader'
+import { Cursor }         from '@/components/ui/Cursor'
+import { ScrollProgress } from '@/components/ui/ScrollProgress'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -72,6 +73,7 @@ export default function RootLayout({
         >
           דלג לתוכן
         </a>
+        <ScrollProgress />
         <IntroLoader />
         <Cursor />
         {children}

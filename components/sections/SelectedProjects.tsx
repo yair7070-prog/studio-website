@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect, useCallback } from 'react'
-import { motion, useReducedMotion } from 'framer-motion'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import type { ProjectsContent, ProjectItem } from '@/lib/content/home'
 
 const EASE = [0.22, 0.61, 0.36, 1] as const
@@ -32,7 +32,7 @@ function useFocusTrap(
       if (e.shiftKey) {
         if (document.activeElement === first) { e.preventDefault(); last?.focus() }
       } else {
-        if (document.activeElement === last) { e.preventDefault(); first?.focus() }
+        if (document.activeElement === last)  { e.preventDefault(); first?.focus() }
       }
     }
 
@@ -46,6 +46,7 @@ function useFocusTrap(
 function Lightbox({ project, onClose }: { project: ProjectItem; onClose: () => void }) {
   const dialogRef = useRef<HTMLDivElement>(null)
   const titleId   = `lb-${project.id}`
+  const reduced   = useReducedMotion()
 
   useFocusTrap(dialogRef, true, onClose)
 
@@ -56,17 +57,27 @@ function Lightbox({ project, onClose }: { project: ProjectItem; onClose: () => v
   }, [])
 
   return (
-    <div
+    /* Backdrop — fades in/out */
+    <motion.div
       className="fixed inset-0 z-50 bg-espresso/90 flex items-start justify-center p-6 overflow-y-auto"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: reduced ? 0 : 0.25, ease: EASE }}
       onClick={onClose}
       role="presentation"
     >
-      <div
+      {/* Dialog — scale + fade in from below */}
+      <motion.div
         ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
         className="relative w-full max-w-3xl my-auto py-8"
+        initial={{ opacity: 0, scale: reduced ? 1 : 0.96, y: reduced ? 0 : 16 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: reduced ? 1 : 0.96, y: reduced ? 0 : 8 }}
+        transition={{ duration: reduced ? 0 : 0.35, ease: EASE }}
         onClick={e => e.stopPropagation()}
       >
         <h2 id={titleId} className="sr-only">{project.name}</h2>
@@ -75,7 +86,7 @@ function Lightbox({ project, onClose }: { project: ProjectItem; onClose: () => v
         <div className="flex justify-end mb-6">
           <button
             onClick={onClose}
-            className="text-small text-bone hover:text-walnut transition-colors duration-300 ease-paper focus:outline-none focus-visible:ring-2 focus-visible:ring-walnut focus-visible:ring-offset-2 focus-visible:ring-offset-espresso"
+            className="text-small text-bone hover:text-walnut transition-colors duration-300 ease-paper focus:outline-none focus-visible:ring-2 focus-visible:ring-walnut focus-visible:ring-offset-2 focus-visible:ring-offset-espresso cursor-pointer"
           >
             סגור
           </button>
@@ -96,8 +107,8 @@ function Lightbox({ project, onClose }: { project: ProjectItem; onClose: () => v
         <p className="mt-8 font-serif text-body-l text-bone/80 max-w-[52ch]">
           {project.description}
         </p>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   )
 }
 
@@ -105,7 +116,8 @@ function Lightbox({ project, onClose }: { project: ProjectItem; onClose: () => v
 
 export function SelectedProjects({ eyebrow, items }: ProjectsContent) {
   const reduced = useReducedMotion()
-  const [openProject, setOpenProject] = useState<ProjectItem | null>(null)
+  const [openProject,  setOpenProject]  = useState<ProjectItem | null>(null)
+  const [hoveredTile,  setHoveredTile]  = useState<string | null>(null)
   const triggerRef  = useRef<HTMLButtonElement | null>(null)
   const wasOpenRef  = useRef(false)
 
@@ -116,7 +128,7 @@ export function SelectedProjects({ eyebrow, items }: ProjectsContent) {
 
   const closeModal = useCallback(() => setOpenProject(null), [])
 
-  // Restore focus to originating tile on close
+  /* Restore focus to originating tile on close */
   useEffect(() => {
     if (wasOpenRef.current && !openProject) triggerRef.current?.focus()
     wasOpenRef.current = !!openProject
@@ -142,48 +154,80 @@ export function SelectedProjects({ eyebrow, items }: ProjectsContent) {
         */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-16 md:gap-y-[120px]">
           {items.map((item, index) => {
-            const delay = (Math.floor(index / 2) * 80 + (index % 2 === 1 ? 120 : 0)) / 1000
+            const delay    = (Math.floor(index / 2) * 80 + (index % 2 === 1 ? 120 : 0)) / 1000
+            const isHovered = hoveredTile === item.id
             return (
-            <motion.div
-              key={item.id}
-              className={index % 2 === 1 ? 'md:pt-[120px]' : ''}
-              initial={reduced ? { opacity: 1 } : { opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-10%' }}
-              transition={{ duration: 0.6, delay, ease: EASE }}
-            >
-              <button
-                onClick={e => openModal(item, e)}
-                aria-haspopup="dialog"
-                className="group w-full text-start focus:outline-none focus-visible:ring-2 focus-visible:ring-walnut focus-visible:ring-offset-4"
+              <motion.div
+                key={item.id}
+                className={index % 2 === 1 ? 'md:pt-[120px]' : ''}
+                initial={reduced ? { opacity: 1 } : { opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-10%' }}
+                transition={{ duration: 0.65, delay, ease: EASE }}
               >
-                {/* Label */}
-                <p className="text-small text-taupe tracking-[0.08em] mb-3">
-                  {item.label.text}
-                </p>
+                <button
+                  onClick={e => openModal(item, e)}
+                  onMouseEnter={() => !reduced && setHoveredTile(item.id)}
+                  onMouseLeave={() => setHoveredTile(null)}
+                  aria-haspopup="dialog"
+                  className="group w-full text-start focus:outline-none focus-visible:ring-2 focus-visible:ring-walnut focus-visible:ring-offset-4 cursor-pointer"
+                >
+                  {/* Label */}
+                  <p className="text-small text-taupe tracking-[0.08em] mb-3">
+                    {item.label.text}
+                  </p>
 
-                {/* Image */}
-                <div className="aspect-[4/5] bg-mushroom relative overflow-hidden transition-[opacity,transform] duration-[700ms] md:group-hover:opacity-[0.92] md:group-hover:scale-[1.02]">
-                  <span className="absolute top-3 start-3 text-small text-taupe select-none">
-                    תמונה תתווסף
-                  </span>
-                </div>
+                  {/* Image — JS-driven hover: scale + opacity, plus walnut hairline draw */}
+                  <div className="aspect-[4/5] bg-mushroom relative overflow-hidden">
+                    <motion.div
+                      className="absolute inset-0"
+                      animate={isHovered ? { opacity: 0.9, scale: 1.03 } : { opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.7, ease: EASE }}
+                    >
+                      <span className="absolute top-3 start-3 text-small text-taupe select-none">
+                        תמונה תתווסף
+                      </span>
+                    </motion.div>
 
-                {/* Name */}
-                <p className="mt-6 font-serif text-headline-m text-espresso transition-colors duration-300 md:group-hover:text-walnut">
-                  {item.name}
-                </p>
+                    {/* Walnut hairline — draws from reading-start (right in RTL) on hover */}
+                    <motion.div
+                      className="absolute bottom-0 inset-x-0 h-px bg-walnut"
+                      initial={{ scaleX: 0 }}
+                      animate={{ scaleX: isHovered ? 1 : 0 }}
+                      transition={{ duration: isHovered ? 0.5 : 0.4, ease: EASE }}
+                      style={{ transformOrigin: 'right center' }}
+                    />
+                  </div>
 
-                {/* Metadata */}
-                <p className="mt-2 text-small text-taupe">{item.metadata}</p>
-              </button>
-            </motion.div>
+                  {/* Name — transitions to walnut on hover */}
+                  <p
+                    className={[
+                      'mt-6 font-serif text-headline-m transition-colors duration-300 ease-paper',
+                      isHovered ? 'text-walnut' : 'text-espresso',
+                    ].join(' ')}
+                  >
+                    {item.name}
+                  </p>
+
+                  {/* Metadata */}
+                  <p className="mt-2 text-small text-taupe">{item.metadata}</p>
+                </button>
+              </motion.div>
             )
           })}
         </div>
       </div>
 
-      {openProject && <Lightbox project={openProject} onClose={closeModal} />}
+      {/* AnimatePresence enables exit animations on the lightbox */}
+      <AnimatePresence>
+        {openProject && (
+          <Lightbox
+            key={openProject.id}
+            project={openProject}
+            onClose={closeModal}
+          />
+        )}
+      </AnimatePresence>
     </section>
   )
 }

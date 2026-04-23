@@ -1,6 +1,7 @@
 'use client'
 
-import { motion, useReducedMotion } from 'framer-motion'
+import { useRef } from 'react'
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import type { AboutContent } from '@/lib/content/home'
 
 const VARIANTS = {
@@ -15,6 +16,12 @@ const BASE_TRANSITION = {
 
 export function About({ paragraph, portraitAlt, signature, tagline }: AboutContent) {
   const reduced = useReducedMotion()
+  const portraitRef = useRef<HTMLDivElement>(null)
+  const { scrollYProgress: portraitProgress } = useScroll({
+    target: portraitRef,
+    offset: ['start end', 'end start'],
+  })
+  const portraitY = useTransform(portraitProgress, [0, 1], ['24px', '-24px'])
 
   const initial = reduced ? 'visible' : 'hidden'
 
@@ -54,6 +61,7 @@ export function About({ paragraph, portraitAlt, signature, tagline }: AboutConte
 
           {/* Portrait — reading-end (left in RTL) */}
           <motion.div
+            ref={portraitRef}
             className="col-span-12 md:col-start-8 md:col-span-4"
             variants={VARIANTS}
             initial={initial}
@@ -61,15 +69,16 @@ export function About({ paragraph, portraitAlt, signature, tagline }: AboutConte
             viewport={{ once: true, margin: '-20%' }}
             transition={{ ...BASE_TRANSITION, delay: reduced ? 0 : 0.12 }}
           >
-            <div
+            <motion.div
               className="relative aspect-[4/5] bg-mushroom overflow-hidden"
               role="img"
               aria-label={portraitAlt}
+              style={reduced ? {} : { y: portraitY }}
             >
               <span className="absolute top-4 start-4 text-small text-taupe select-none">
                 תמונת דיוקן תתווסף
               </span>
-            </div>
+            </motion.div>
           </motion.div>
 
         </div>

@@ -41,8 +41,14 @@ export function Footer({ region, phone, phoneHref, email, instagram, copyright }
           </div>
         </div>
 
-        {/* Hairline */}
-        <div className="mt-12 mb-6 h-px bg-stone" />
+        {/* Hairline — fades in as footer scrolls into view */}
+        <motion.div
+          className="mt-12 mb-6 h-px bg-stone"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 0.4 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: EASE }}
+        />
 
         {/* Bottom row */}
         <div className="flex justify-between items-center">
