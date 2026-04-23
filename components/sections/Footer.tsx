@@ -1,7 +1,7 @@
 import Logomark from '@/components/brand/Logomark'
 import type { FooterContent } from '@/lib/content/home'
 
-export function Footer({ region, phone, email, instagram, copyright }: FooterContent) {
+export function Footer({ region, phone, phoneHref, email, instagram, copyright }: FooterContent) {
   return (
     <footer className="bg-bone py-section-sm border-t border-mushroom">
       <div className="max-w-container mx-auto px-[6vw]">
@@ -14,7 +14,7 @@ export function Footer({ region, phone, email, instagram, copyright }: FooterCon
           <div className="flex flex-col gap-2 text-end">
             <span className="text-small text-taupe">{region}</span>
             <a
-              href={`tel:${phone}`}
+              href={phoneHref}
               className="text-small text-taupe hover:text-walnut transition-colors duration-300 ease-paper"
             >
               <span dir="ltr" className="tabular-nums">{phone}</span>

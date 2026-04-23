@@ -34,6 +34,7 @@ export interface FooterContent {
   studioName: string
   region: string
   phone: string
+  phoneHref: string
   email: string
   instagram: string
   copyright: string
@@ -59,8 +60,9 @@ export const positioningStrip: PositioningStripContent = {
 export const footer: FooterContent = {
   studioName: 'a.w interior design',
   region: 'מרכז הארץ — מגדרה ועד חדרה',
-  phone: '+972-50-000-0000',
-  email: 'studio@awinteriors.co.il',
+  phone: '054-261-6415',
+  phoneHref: 'tel:+972542616415',
+  email: 'awds.adiw@gmail.com',
   instagram: 'https://www.instagram.com/a.w_interiordesign_/',
   copyright: '© 2026 a.w interior design',
 }
