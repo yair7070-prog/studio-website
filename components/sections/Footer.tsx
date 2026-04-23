@@ -35,12 +35,12 @@ export function Footer({ region, phone, email, instagram, copyright }: FooterCon
         <div className="flex justify-between items-center">
           <span className="text-small text-taupe">{copyright}</span>
           <a
-            href={`https://instagram.com/${instagram.replace('@', '')}`}
+            href={instagram}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-small text-taupe hover:text-walnut transition-colors duration-300 ease-paper"
           >
-            Instagram
+            @a.w_interiordesign_
             <svg
               width="16"
               height="16"

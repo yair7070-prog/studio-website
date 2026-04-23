@@ -61,7 +61,7 @@ export const footer: FooterContent = {
   region: 'מרכז הארץ — מגדרה ועד חדרה',
   phone: '+972-50-000-0000',
   email: 'studio@awinteriors.co.il',
-  instagram: '@aw.interiordesign',
+  instagram: 'https://www.instagram.com/a.w_interiordesign_/',
   copyright: '© 2026 a.w interior design',
 }
 

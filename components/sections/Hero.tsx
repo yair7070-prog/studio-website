@@ -32,7 +32,7 @@ export function Hero({ positioning, cta, imageAlt, imageLabel }: HeroContent) {
       {/* Logomark — top-left in RTL (end = left) */}
       <div className="absolute top-0 end-0 pe-[8vw] pt-[6vw] md:pe-[6vw]">
         <div className="flex flex-col items-end gap-2">
-          <Logomark variant="original" size={44} />
+          <Logomark variant="original" size={56} />
           <span className="sr-only">a.w interior design — Adi Weinstein</span>
         </div>
       </div>
