@@ -24,7 +24,7 @@ export function ServicesAccordion({ eyebrow, items }: ServicesContent) {
               className="border-b border-mushroom transition-colors duration-[400ms] ease-paper data-[state=open]:bg-mushroom/30"
             >
               <Accordion.Header className="flex">
-                <Accordion.Trigger className="group relative flex w-full items-center justify-between py-8 md:py-10 text-start focus:outline-none focus-visible:ring-2 focus-visible:ring-walnut focus-visible:ring-offset-2">
+                <Accordion.Trigger className="group relative flex w-full items-center justify-between py-8 md:py-10 text-start focus:outline-none">
 
                   {/* Title — reading-start (right in RTL) */}
                   <span className="font-serif text-headline-m text-espresso">
@@ -38,7 +38,7 @@ export function ServicesAccordion({ eyebrow, items }: ServicesContent) {
 
                   {/* Icon — reading-end (left in RTL), rotates on open */}
                   <span
-                    className="ms-6 flex-shrink-0 text-taupe transition-transform duration-500 ease-paper group-data-[state=open]:rotate-45 motion-reduce:transition-none"
+                    className="ms-6 flex-shrink-0 text-taupe transition-[transform,color] duration-500 ease-paper group-data-[state=open]:rotate-45 group-data-[state=open]:text-walnut motion-reduce:transition-none"
                     aria-hidden="true"
                   >
                     <svg
