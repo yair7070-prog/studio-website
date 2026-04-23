@@ -7,13 +7,17 @@ const INTERACTIVE = 'a, button, [role="button"], input, select, textarea'
 
 export function Cursor() {
   const reduced = useReducedMotion()
+  const [mounted, setMounted] = useState(false)
   const [active, setActive] = useState(false)
   const [hover,  setHover]  = useState(false)
   const [down,   setDown]   = useState(false)
   const elRef  = useRef<HTMLDivElement>(null)
   const rafRef = useRef<number>(0)
 
+  useEffect(() => { setMounted(true) }, [])
+
   useEffect(() => {
+    if (!mounted) return
     if (reduced) return
     if (!window.matchMedia('(pointer: fine)').matches) return
 
@@ -45,8 +49,9 @@ export function Cursor() {
       document.removeEventListener('mousedown', onDown)
       document.removeEventListener('mouseup',   onUp)
     }
-  }, [reduced])
+  }, [mounted, reduced])
 
+  if (!mounted) return null
   if (!active) return null
 
   const size = down ? 4 : hover ? 24 : 6

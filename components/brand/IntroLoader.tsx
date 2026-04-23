@@ -7,11 +7,15 @@ import Logomark from '@/components/brand/Logomark'
 const EASE = [0.22, 0.61, 0.36, 1] as const
 
 export function IntroLoader() {
+  const [mounted, setMounted] = useState(false)
   const [show,    setShow]    = useState(false)
   const [logoVis, setLogoVis] = useState(false)
   const [fadeOut, setFadeOut] = useState(false)
 
+  useEffect(() => { setMounted(true) }, [])
+
   useEffect(() => {
+    if (!mounted) return
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const seen    = sessionStorage.getItem('intro-seen')
     sessionStorage.setItem('intro-seen', '1')
@@ -34,8 +38,9 @@ export function IntroLoader() {
     t.push(setTimeout(() => setShow(false), 2500))
 
     return () => t.forEach(clearTimeout)
-  }, [])
+  }, [mounted])
 
+  if (!mounted) return null
   if (!show) return null
 
   return (
