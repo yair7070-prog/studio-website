@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { Wordmark } from '@/components/brand/Wordmark'
+import Logomark from '@/components/brand/Logomark'
 import type { HeroContent } from '@/lib/content/home'
 
 export function Hero({ positioning, cta, imageAlt, imageLabel }: HeroContent) {
@@ -29,9 +29,12 @@ export function Hero({ positioning, cta, imageAlt, imageLabel }: HeroContent) {
       className="relative min-h-[100svh] overflow-hidden bg-mushroom"
       aria-label={imageAlt}
     >
-      {/* Wordmark — top-left in RTL (end = left) */}
+      {/* Logomark — top-left in RTL (end = left) */}
       <div className="absolute top-0 end-0 pe-[8vw] pt-[6vw] md:pe-[6vw]">
-        <Wordmark />
+        <div className="flex flex-col items-end gap-2">
+          <Logomark variant="espresso" size={44} />
+          <span className="sr-only">a.w interior design — Adi Weinstein</span>
+        </div>
       </div>
 
       {/* Content block — bottom-right in RTL (start = right) */}

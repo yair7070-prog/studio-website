@@ -59,7 +59,7 @@ export const footer: FooterContent = {
   studioName: 'a.w interior design',
   region: 'מרכז הארץ — מגדרה ועד חדרה',
   phone: '+972-50-000-0000',
-  email: 'studio@aw-interiordesign.co.il',
+  email: 'studio@awinteriors.co.il',
   instagram: '@aw.interiordesign',
   copyright: '© 2026 a.w interior design',
 }
@@ -70,7 +70,7 @@ export const about: AboutContent = {
   paragraph:
     'אני מעצבת פנים עם גישה מעשית ורגועה. העבודה שלי מתחילה בהקשבה. לחיי היום־יום של המשפחה, להעדפות שלא תמיד מדוברות, ולפער שלרוב קיים בין שני בני הזוג. משם נבנה בית שמרגיש אישי, נכון, ולא מעוצב לראווה. כל החלטה מוסברת. כל שלב מלווה באופן אישי.',
   portraitAlt: 'דיוקן סביבתי של המעצבת',
-  signature: 'Ayelet',
+  signature: 'Adi Weinstein',
 }
 
 export const services: ServicesContent = {

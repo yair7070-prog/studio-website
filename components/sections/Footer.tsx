@@ -1,13 +1,16 @@
-import { Wordmark } from '@/components/brand/Wordmark'
+import Logomark from '@/components/brand/Logomark'
 import type { FooterContent } from '@/lib/content/home'
 
 export function Footer({ region, phone, email, instagram, copyright }: FooterContent) {
   return (
     <footer className="bg-bone py-section-sm border-t border-mushroom">
       <div className="max-w-container mx-auto px-[6vw]">
-        {/* Top row: Wordmark at start (right in RTL), contact at end (left in RTL) */}
+        {/* Top row: Logomark at start (right in RTL), contact at end (left in RTL) */}
         <div className="flex justify-between items-start">
-          <Wordmark />
+          <div className="flex flex-col items-start gap-2">
+            <Logomark variant="espresso" size={36} />
+            <span className="sr-only">a.w interior design — Adi Weinstein</span>
+          </div>
           <div className="flex flex-col gap-2 text-end">
             <span className="text-small text-taupe">{region}</span>
             <a
