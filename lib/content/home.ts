@@ -43,7 +43,7 @@ export interface FooterContent {
 // ─── Wave 2 ──────────────────────────────────────────────
 
 export const hero: HeroContent = {
-  positioning: 'דירות קבלן, מעוצבות מהיסודות — לא מבחירת הספה.',
+  positioning: 'בית שנבנה סביבך.',
   cta: 'לקביעת שיחת היכרות',
   imageAlt: 'חלל מגורים בתכנון האולפן',
   imageLabel: { text: 'הדמיה', lang: 'he' },
