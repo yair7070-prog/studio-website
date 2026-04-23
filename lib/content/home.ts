@@ -2,7 +2,7 @@ export interface HeroContent {
   positioning: string
   cta: string
   imageAlt: string
-  imageLabel?: string
+  imageLabel?: { text: string; lang: 'he' | 'en' }
 }
 
 export interface PositioningStripContent {
@@ -22,22 +22,22 @@ export const hero: HeroContent = {
   positioning: 'תכנון פנים לבית שנבנה סביב האנשים שגרים בו.',
   cta: 'לקביעת שיחת היכרות',
   imageAlt: 'חלל מגורים בתכנון האולפן',
-  imageLabel: 'הדמיה',
+  imageLabel: { text: 'הדמיה', lang: 'he' },
 }
 
 export const positioningStrip: PositioningStripContent = {
   statements: [
-    'כל פרויקט מתחיל בהקשבה מעמיקה לאנשים שיחיו בו.',
-    'עיצוב שלא מתיימר — רק חלל שמרגיש נכון.',
-    'פרטים שנבחרים בקפידה, תוצאה שנראית מובנת מאליה.',
+    'ליווי אישי מהשרטוט הראשון ועד המפתח',
+    'החלטות מנומקות, לא טרנדים חולפים',
+    'גישור בין שני בני הזוג',
   ],
 }
 
 export const footer: FooterContent = {
   studioName: 'a.w interior design',
-  region: 'תל אביב, ישראל',
+  region: 'מרכז הארץ — מגדרה ועד חדרה',
   phone: '+972-50-000-0000',
   email: 'studio@aw-interiordesign.co.il',
   instagram: '@aw.interiordesign',
-  copyright: '© 2024 a.w interior design',
+  copyright: '© 2026 a.w interior design',
 }

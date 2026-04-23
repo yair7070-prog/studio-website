@@ -37,7 +37,15 @@ export function Hero({ positioning, cta, imageAlt, imageLabel }: HeroContent) {
       {/* Content block — bottom-right in RTL (start = right) */}
       <div className="absolute bottom-0 start-0 ps-[8vw] pb-[8vw] md:ps-[6vw] md:pb-[6vw] max-w-[42rem]">
         {imageLabel && (
-          <p className="font-latin uppercase text-label text-taupe mb-4">{imageLabel}</p>
+          <p
+            className={
+              imageLabel.lang === 'en'
+                ? 'font-latinSans uppercase text-label tracking-[0.12em] text-taupe mb-4'
+                : 'font-sans text-label tracking-[0.08em] text-taupe mb-4'
+            }
+          >
+            {imageLabel.text}
+          </p>
         )}
         <h1 className="font-serif text-display-xl text-espresso mb-8">{positioning}</h1>
         <a
