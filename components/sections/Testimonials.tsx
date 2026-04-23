@@ -81,7 +81,7 @@ export function Testimonials({ eyebrow, items }: TestimonialsContent) {
               </div>
 
               {/* Progress hairline — CSS animation; fills from reading-start (end-0 = right in RTL) */}
-              {!reduced && (
+              {reduced === false && (
                 <div className="mt-6 h-px bg-stone/40 relative overflow-hidden">
                   <div
                     key={`prog-${index}`}
