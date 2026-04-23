@@ -215,8 +215,8 @@ export const finalCTA: FinalCTAContent = {
     submit:           'שליחה',
     submitting:       'שולח...',
     alternativesLabel: 'או בדרך אחרת',
-    whatsapp: { label: 'וואטסאפ', href: 'https://wa.me/972500000000' },
-    phone:    { label: 'טלפון',    href: 'tel:+972500000000' },
+    whatsapp: { label: 'וואטסאפ', href: 'https://wa.me/972542616415' },
+    phone:    { label: 'טלפון',    href: 'tel:+972542616415' },
     errors: {
       required:     'שדה חובה',
       invalidPhone: 'אנא הזיני מספר טלפון תקין',

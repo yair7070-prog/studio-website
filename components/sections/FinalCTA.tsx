@@ -19,16 +19,9 @@ function createSchema(errors: FinalCTAContent['form']['errors']) {
       .string()
       .regex(/^0\d{1,2}-?\d{7}$|^\+972\d{8,9}$/, errors.invalidPhone),
     email: z.string().email(errors.invalidEmail),
-    region: z.enum(['merkaz', 'sharon', 'shfela', 'other'], {
-      errorMap: () => ({ message: errors.required }),
-    }),
-    projectType: z.enum(
-      ['contractor', 'renovation', 'private-house', 'undecided'],
-      { errorMap: () => ({ message: errors.required }) }
-    ),
-    timeline: z.enum(['immediate', 'quarter', 'half-year', 'exploring'], {
-      errorMap: () => ({ message: errors.required }),
-    }),
+    region:      z.string().min(1, errors.required),
+    projectType: z.string().min(1, errors.required),
+    timeline:    z.string().min(1, errors.required),
     size: z.string().optional(),
     message: z.string().optional(),
   })
