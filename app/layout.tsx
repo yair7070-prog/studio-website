@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { davidLibre, assistant, cormorantGaramond, inter } from '@/lib/fonts'
+import { IntroLoader } from '@/components/brand/IntroLoader'
+import { Cursor }      from '@/components/ui/Cursor'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -32,6 +34,8 @@ export default function RootLayout({
       className={`${davidLibre.variable} ${assistant.variable} ${cormorantGaramond.variable} ${inter.variable}`}
     >
       <body className="bg-bone text-espresso font-serif">
+        <IntroLoader />
+        <Cursor />
         {children}
       </body>
     </html>

@@ -1,7 +1,10 @@
 'use client'
 
 import { useState, useRef, useEffect, useCallback } from 'react'
+import { motion, useReducedMotion } from 'framer-motion'
 import type { ProjectsContent, ProjectItem } from '@/lib/content/home'
+
+const EASE = [0.22, 0.61, 0.36, 1] as const
 
 // ─── Focus trap hook ──────────────────────────────────────
 
@@ -101,6 +104,7 @@ function Lightbox({ project, onClose }: { project: ProjectItem; onClose: () => v
 // ─── SelectedProjects ─────────────────────────────────────
 
 export function SelectedProjects({ eyebrow, items }: ProjectsContent) {
+  const reduced = useReducedMotion()
   const [openProject, setOpenProject] = useState<ProjectItem | null>(null)
   const triggerRef  = useRef<HTMLButtonElement | null>(null)
   const wasOpenRef  = useRef(false)
@@ -121,15 +125,32 @@ export function SelectedProjects({ eyebrow, items }: ProjectsContent) {
   return (
     <section className="bg-bone py-section-lg">
       <div className="max-w-container mx-auto px-[6vw]">
-        <p className="text-small text-taupe tracking-[0.08em] mb-16">{eyebrow}</p>
+        <motion.p
+          className="text-small text-taupe tracking-[0.08em] mb-16"
+          initial={reduced ? { opacity: 1 } : { opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, margin: '-15%' }}
+          transition={{ duration: 0.5, ease: EASE }}
+        >
+          {eyebrow}
+        </motion.p>
 
         {/*
           RTL 2-col grid: col 1 = right (reading-start), col 2 = left (reading-end).
           Items at even index (0, 2) land in col 1; odd (1, 3) in col 2 with +120px offset.
         */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-16 md:gap-y-[120px]">
-          {items.map((item, index) => (
-            <div key={item.id} className={index % 2 === 1 ? 'md:pt-[120px]' : ''}>
+          {items.map((item, index) => {
+            const delay = (Math.floor(index / 2) * 80 + (index % 2 === 1 ? 120 : 0)) / 1000
+            return (
+            <motion.div
+              key={item.id}
+              className={index % 2 === 1 ? 'md:pt-[120px]' : ''}
+              initial={reduced ? { opacity: 1 } : { opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-10%' }}
+              transition={{ duration: 0.6, delay, ease: EASE }}
+            >
               <button
                 onClick={e => openModal(item, e)}
                 aria-haspopup="dialog"
@@ -141,7 +162,7 @@ export function SelectedProjects({ eyebrow, items }: ProjectsContent) {
                 </p>
 
                 {/* Image */}
-                <div className="aspect-[4/5] bg-mushroom relative overflow-hidden transition-opacity duration-[400ms] md:group-hover:opacity-[0.85]">
+                <div className="aspect-[4/5] bg-mushroom relative overflow-hidden transition-[opacity,transform] duration-[700ms] md:group-hover:opacity-[0.92] md:group-hover:scale-[1.02]">
                   <span className="absolute top-3 start-3 text-small text-taupe select-none">
                     תמונה תתווסף
                   </span>
@@ -155,8 +176,9 @@ export function SelectedProjects({ eyebrow, items }: ProjectsContent) {
                 {/* Metadata */}
                 <p className="mt-2 text-small text-taupe">{item.metadata}</p>
               </button>
-            </div>
-          ))}
+            </motion.div>
+            )
+          })}
         </div>
       </div>
 

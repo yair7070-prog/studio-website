@@ -5,6 +5,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
+
+const EASE = [0.22, 0.61, 0.36, 1] as const
 import type { FinalCTAContent } from '@/lib/content/home'
 import { submitLead } from '@/lib/leads'
 import { Field } from '@/components/form/Field'
@@ -65,13 +67,43 @@ export function FinalCTA({
     <section id="lead-form" className="bg-sand py-section-xl">
       <div className="max-w-container mx-auto px-[6vw]">
 
-        <p className="text-small text-taupe tracking-[0.08em]">{eyebrow}</p>
+        <motion.p
+          className="text-small text-taupe tracking-[0.08em]"
+          initial={reduced ? { opacity: 1 } : { opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-15%' }}
+          transition={{ duration: 0.6, ease: EASE }}
+        >
+          {eyebrow}
+        </motion.p>
         <div className="mt-12" />
-        <h2 className="font-serif text-display-xl text-espresso">{headline}</h2>
+        <motion.h2
+          className="font-serif text-display-xl text-espresso"
+          initial={reduced ? { opacity: 1 } : { opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-15%' }}
+          transition={{ duration: 0.6, delay: 0.12, ease: EASE }}
+        >
+          {headline}
+        </motion.h2>
         <div className="mt-8" />
-        <p className="font-serif text-body-l text-espresso max-w-[56ch]">{intro}</p>
+        <motion.p
+          className="font-serif text-body-l text-espresso max-w-[56ch]"
+          initial={reduced ? { opacity: 1 } : { opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-15%' }}
+          transition={{ duration: 0.6, delay: 0.24, ease: EASE }}
+        >
+          {intro}
+        </motion.p>
         <div className="mt-20" />
 
+        <motion.div
+          initial={reduced ? { opacity: 1 } : { opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, margin: '-10%' }}
+          transition={{ duration: 0.6, delay: 0.48, ease: EASE }}
+        >
         <AnimatePresence mode="wait">
           {submitted ? (
             <motion.div
@@ -189,20 +221,21 @@ export function FinalCTA({
                     className="group relative inline-block font-serif text-body-m text-espresso"
                   >
                     {form.whatsapp.label}
-                    <span className="absolute -bottom-px end-0 h-px w-0 bg-espresso group-hover:w-full transition-[width] duration-300 ease-paper motion-reduce:transition-none" />
+                    <span className="absolute -bottom-px start-0 h-px w-0 bg-espresso group-hover:w-full transition-[width] duration-300 ease-paper motion-reduce:transition-none" />
                   </a>
                   <a
                     href={form.phone.href}
                     className="group relative inline-block font-serif text-body-m text-espresso"
                   >
                     {form.phone.label}
-                    <span className="absolute -bottom-px end-0 h-px w-0 bg-espresso group-hover:w-full transition-[width] duration-300 ease-paper motion-reduce:transition-none" />
+                    <span className="absolute -bottom-px start-0 h-px w-0 bg-espresso group-hover:w-full transition-[width] duration-300 ease-paper motion-reduce:transition-none" />
                   </a>
                 </div>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
+        </motion.div>
 
       </div>
     </section>

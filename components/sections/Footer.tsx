@@ -1,11 +1,24 @@
+'use client'
+
+import { motion, useReducedMotion } from 'framer-motion'
 import Logomark from '@/components/brand/Logomark'
 import type { FooterContent } from '@/lib/content/home'
 
+const EASE = [0.22, 0.61, 0.36, 1] as const
+
 export function Footer({ region, phone, phoneHref, email, instagram, copyright }: FooterContent) {
+  const reduced = useReducedMotion()
+
   return (
-    <footer className="bg-bone py-section-sm border-t border-mushroom">
+    <motion.footer
+      className="bg-bone py-section-sm border-t border-mushroom"
+      initial={reduced ? { opacity: 1 } : { opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true, margin: '-15%' }}
+      transition={{ duration: 0.4, ease: EASE }}
+    >
       <div className="max-w-container mx-auto px-[6vw]">
-        {/* Top row: Logomark at start (right in RTL), contact at end (left in RTL) */}
+        {/* Top row */}
         <div className="flex justify-between items-start">
           <div className="flex flex-col items-start gap-2">
             <Logomark variant="original" size={36} />
@@ -59,6 +72,6 @@ export function Footer({ region, phone, phoneHref, email, instagram, copyright }
           </a>
         </div>
       </div>
-    </footer>
+    </motion.footer>
   )
 }
