@@ -52,7 +52,7 @@ export function Hero({ positioning, cta, imageAlt, imageLabel }: HeroContent) {
         )}
         <h1 className="font-serif text-display-xl text-espresso mb-8">{positioning}</h1>
         <a
-          href="#contact"
+          href="#lead-form"
           className="group relative inline-block font-serif text-body-l text-espresso"
         >
           {cta}

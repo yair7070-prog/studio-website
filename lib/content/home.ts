@@ -117,6 +117,117 @@ export const services: ServicesContent = {
   ],
 }
 
+// ─── Wave 5 ──────────────────────────────────────────────
+
+export interface SelectOption {
+  value: string
+  label: string
+}
+
+export interface FieldConfig {
+  label: string
+  optional?: boolean
+}
+
+export interface SelectFieldConfig extends FieldConfig {
+  options: SelectOption[]
+}
+
+export interface LeadFormContent {
+  fields: {
+    name: FieldConfig
+    phone: FieldConfig
+    email: FieldConfig
+    region: SelectFieldConfig
+    projectType: SelectFieldConfig
+    timeline: SelectFieldConfig
+    size: FieldConfig
+    message: FieldConfig
+  }
+  submit: string
+  submitting: string
+  alternativesLabel: string
+  whatsapp: { label: string; href: string }
+  phone: { label: string; href: string }
+  errors: {
+    required: string
+    invalidPhone: string
+    invalidEmail: string
+    submitFailed: string
+  }
+}
+
+export interface FinalCTAContent {
+  eyebrow: string
+  headline: string
+  intro: string
+  form: LeadFormContent
+  success: {
+    headline: string
+    body: string
+  }
+}
+
+export const finalCTA: FinalCTAContent = {
+  eyebrow: 'התחלת שיחה',
+  headline: 'הפרויקט שלכם.',
+  intro: 'ספרו לי על הבית, על השלב שאתם נמצאים בו, ועל מה שחשוב לכם. אני חוזרת אישית לכל פנייה תוך 48 שעות.',
+  form: {
+    fields: {
+      name:        { label: 'שם מלא' },
+      phone:       { label: 'טלפון' },
+      email:       { label: 'אימייל' },
+      region: {
+        label: 'אזור הפרויקט',
+        options: [
+          { value: '',        label: 'בחרו אזור' },
+          { value: 'merkaz',  label: 'מרכז' },
+          { value: 'sharon',  label: 'שרון' },
+          { value: 'shfela',  label: 'שפלה' },
+          { value: 'other',   label: 'אחר' },
+        ],
+      },
+      projectType: {
+        label: 'סוג הפרויקט',
+        options: [
+          { value: '',               label: 'בחרו סוג' },
+          { value: 'contractor',     label: 'דירה מקבלן' },
+          { value: 'renovation',     label: 'שיפוץ דירה קיימת' },
+          { value: 'private-house',  label: 'בית פרטי' },
+          { value: 'undecided',      label: 'טרם החלטתי' },
+        ],
+      },
+      timeline: {
+        label: 'לוח זמנים מתוכנן',
+        options: [
+          { value: '',          label: 'בחרו לוח זמנים' },
+          { value: 'immediate', label: 'מיידי' },
+          { value: 'quarter',   label: 'ברבעון הקרוב' },
+          { value: 'half-year', label: 'חצי שנה' },
+          { value: 'exploring', label: 'עדיין בוחנת אפשרויות' },
+        ],
+      },
+      size:    { label: 'מטר"ר משוער', optional: true },
+      message: { label: 'ספרו לי על הפרויקט', optional: true },
+    },
+    submit:           'שליחה',
+    submitting:       'שולח...',
+    alternativesLabel: 'או בדרך אחרת',
+    whatsapp: { label: 'וואטסאפ', href: 'https://wa.me/972500000000' },
+    phone:    { label: 'טלפון',    href: 'tel:+972500000000' },
+    errors: {
+      required:     'שדה חובה',
+      invalidPhone: 'אנא הזיני מספר טלפון תקין',
+      invalidEmail: 'אנא הזיני כתובת אימייל תקינה',
+      submitFailed: 'משהו השתבש. אנא נסי שוב או פני אליי ישירות.',
+    },
+  },
+  success: {
+    headline: 'תודה.',
+    body: 'קיבלתי את הפנייה. אני חוזרת אלייך אישית תוך 48 שעות, ברוב המקרים הרבה קודם.',
+  },
+}
+
 // ─── Wave 4 ──────────────────────────────────────────────
 
 export interface ProjectLabel {
