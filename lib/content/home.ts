@@ -13,6 +13,7 @@ export interface AboutContent {
   paragraph: string
   portraitAlt: string
   signature: string
+  tagline: string
 }
 
 export interface ServiceItem {
@@ -41,7 +42,7 @@ export interface FooterContent {
 // ─── Wave 2 ──────────────────────────────────────────────
 
 export const hero: HeroContent = {
-  positioning: 'תכנון פנים לבית שנבנה סביב האנשים שגרים בו.',
+  positioning: 'דירות קבלן, מעוצבות סביב האנשים שגרים בהן.',
   cta: 'לקביעת שיחת היכרות',
   imageAlt: 'חלל מגורים בתכנון האולפן',
   imageLabel: { text: 'הדמיה', lang: 'he' },
@@ -71,6 +72,7 @@ export const about: AboutContent = {
     'אני מעצבת פנים עם גישה מעשית ורגועה. העבודה שלי מתחילה בהקשבה. לחיי היום־יום של המשפחה, להעדפות שלא תמיד מדוברות, ולפער שלרוב קיים בין שני בני הזוג. משם נבנה בית שמרגיש אישי, נכון, ולא מעוצב לראווה. כל החלטה מוסברת. כל שלב מלווה באופן אישי.',
   portraitAlt: 'דיוקן סביבתי של המעצבת',
   signature: 'Adi Weinstein',
+  tagline: 'מוציאה את המקסימום מכל סטנדרט.',
 }
 
 export const services: ServicesContent = {

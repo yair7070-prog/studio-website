@@ -8,7 +8,7 @@ export function Footer({ region, phone, email, instagram, copyright }: FooterCon
         {/* Top row: Logomark at start (right in RTL), contact at end (left in RTL) */}
         <div className="flex justify-between items-start">
           <div className="flex flex-col items-start gap-2">
-            <Logomark variant="espresso" size={36} />
+            <Logomark variant="original" size={36} />
             <span className="sr-only">a.w interior design — Adi Weinstein</span>
           </div>
           <div className="flex flex-col gap-2 text-end">

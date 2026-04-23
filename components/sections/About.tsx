@@ -13,7 +13,7 @@ const BASE_TRANSITION = {
   ease: [0.22, 0.61, 0.36, 1] as const,
 }
 
-export function About({ paragraph, portraitAlt, signature }: AboutContent) {
+export function About({ paragraph, portraitAlt, signature, tagline }: AboutContent) {
   const reduced = useReducedMotion()
 
   const initial = reduced ? 'visible' : 'hidden'
@@ -45,6 +45,9 @@ export function About({ paragraph, portraitAlt, signature }: AboutContent) {
               aria-label={signature}
             >
               {signature}
+            </p>
+            <p className="mt-12 font-serif text-body-m text-taupe tracking-[0.04em] max-w-[36ch]">
+              {tagline}
             </p>
           </motion.div>
 
