@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
+import Image from 'next/image'
 import Logomark from '@/components/brand/Logomark'
 import type { HeroContent } from '@/lib/content/home'
 
@@ -38,11 +39,37 @@ export function Hero({ positioning, cta, imageAlt }: HeroContent) {
       aria-label={imageAlt}
     >
       {/*
-        Atmospheric layers — static, no animation.
-        1. Radial gradient: depth toward bottom reading-end corner (left in RTL).
-        2. Fine grain: SVG fractal noise at 3% opacity — paper-like material quality.
-        imageLabel ("הדמיה") removed; atmosphere communicates "placeholder" without stating it.
+        Layer order (bottom → top):
+        1. Hero image — full-bleed, fill
+        2. Bottom gradient — readability for text overlay
+        3. Radial gradient — atmospheric depth
+        4. SVG grain — paper quality
+        5. UI chrome (logomark, content, scroll indicator)
       */}
+
+      {/* ── 1. Hero image ─────────────────────────────────────────── */}
+      <div className="absolute inset-0 bg-mushroom">
+        <Image
+          src="/hero.webp"
+          alt="הדמיה של סלון בסגנון עיצוב פנים יוקרה ישראלי — ספה מבוקלה קרם, שולחן סלון מטרוורטין, קיר פלסטר וחלון זכוכית עם נוף לעיר"
+          fill
+          priority
+          fetchPriority="high"
+          sizes="100vw"
+          className="object-cover object-center"
+          quality={85}
+        />
+        {/* Subtle bottom gradient for content-block readability */}
+        <div
+          className="absolute inset-x-0 bottom-0 h-1/3 pointer-events-none"
+          style={{
+            background:
+              'linear-gradient(to bottom, rgba(43,36,32,0) 0%, rgba(43,36,32,0.12) 100%)',
+          }}
+        />
+      </div>
+
+      {/* ── 2. Radial gradient — depth toward bottom reading-end ──── */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -51,6 +78,8 @@ export function Hero({ positioning, cta, imageAlt }: HeroContent) {
         }}
         aria-hidden="true"
       />
+
+      {/* ── 3. Fine grain — SVG fractal noise at 3% opacity ────────── */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -63,7 +92,16 @@ export function Hero({ positioning, cta, imageAlt }: HeroContent) {
         aria-hidden="true"
       />
 
-      {/* Logomark — top-end (left in RTL) */}
+      {/* ── "הדמיה" label — image is AI-generated, label stays ─────── */}
+      <span
+        className="absolute top-4 start-4 text-small text-bone/50 select-none z-10"
+        lang="he"
+        aria-hidden="true"
+      >
+        הדמיה
+      </span>
+
+      {/* ── Logomark — top-end (left in RTL) ───────────────────────── */}
       <div className="absolute top-0 end-0 pe-[8vw] pt-[6vw] md:pe-[6vw]">
         <div className="flex flex-col items-end gap-2">
           <motion.div
@@ -77,7 +115,7 @@ export function Hero({ positioning, cta, imageAlt }: HeroContent) {
         </div>
       </div>
 
-      {/* Content block — bottom-start (right in RTL) with scroll parallax */}
+      {/* ── Content block — bottom-start (right in RTL) + scroll parallax */}
       <motion.div
         className="absolute bottom-0 start-0 ps-[8vw] pb-[8vw] md:ps-[6vw] md:pb-[6vw] max-w-[42rem]"
         style={reduced ? {} : { y: contentY }}
@@ -103,7 +141,7 @@ export function Hero({ positioning, cta, imageAlt }: HeroContent) {
         </motion.a>
       </motion.div>
 
-      {/* Scroll indicator — thin vertical tick at bottom centre */}
+      {/* ── Scroll indicator — thin vertical tick at bottom centre ── */}
       <motion.div
         className="absolute bottom-6 left-1/2 -translate-x-1/2 w-px bg-taupe opacity-40 origin-top"
         initial={{ scaleY: 0 }}
