@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
-import Image from 'next/image'
 import Logomark from '@/components/brand/Logomark'
+import { HeroScrollSequence } from '@/components/sections/HeroScrollSequence'
 import type { HeroContent } from '@/lib/content/home'
 
 const EASE = [0.22, 0.61, 0.36, 1] as const
@@ -47,27 +47,11 @@ export function Hero({ positioning, cta, imageAlt }: HeroContent) {
         5. UI chrome (logomark, content, scroll indicator)
       */}
 
-      {/* ── 1. Hero image ─────────────────────────────────────────── */}
-      <div className="absolute inset-0 bg-mushroom">
-        <Image
-          src="/hero.webp"
-          alt="הדמיה של סלון בסגנון עיצוב פנים יוקרה ישראלי — ספה מבוקלה קרם, שולחן סלון מטרוורטין, קיר פלסטר וחלון זכוכית עם נוף לעיר"
-          fill
-          priority
-          fetchPriority="high"
-          sizes="100vw"
-          className="object-cover object-center"
-          quality={85}
-        />
-        {/* Subtle bottom gradient for content-block readability */}
-        <div
-          className="absolute inset-x-0 bottom-0 h-1/3 pointer-events-none"
-          style={{
-            background:
-              'linear-gradient(to bottom, rgba(43,36,32,0) 0%, rgba(43,36,32,0.22) 100%)',
-          }}
-        />
-      </div>
+      {/* ── 1. Hero image — scroll-linked deconstruction sequence ─── */}
+      <HeroScrollSequence
+        scrollYProgress={scrollYProgress}
+        alt="הדמיה של סלון בסגנון עיצוב פנים יוקרה ישראלי — ספה מבוקלה קרם, שולחן סלון מטרוורטין, קיר פלסטר וחלון זכוכית עם נוף לעיר"
+      />
 
       {/* ── 2. Radial gradient — depth toward bottom reading-end ──── */}
       <div
