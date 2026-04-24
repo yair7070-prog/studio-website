@@ -39,20 +39,20 @@ export function HeroScrollSequence({ scrollYProgress, alt }: Props) {
     setMode(mobile ? 'mobile' : reduced ? 'reduced' : 'sequence')
   }, [])
 
-  // Preload first 30 visible frames (192→163) immediately
+  // Preload first 30 visible frames (001→030) immediately
   useEffect(() => {
     if (mode !== 'sequence') return
-    for (let i = TOTAL; i > TOTAL - 30; i--) {
+    for (let i = 1; i <= 30; i++) {
       const img = new Image()
       img.src = frameSrc(i)
     }
   }, [mode])
 
-  // Lazy-preload remaining frames (162→1) once the page settles
+  // Lazy-preload remaining frames (031→192) once the page settles
   useEffect(() => {
     if (mode !== 'sequence') return
     const load = () => {
-      for (let i = TOTAL - 30; i >= 1; i--) {
+      for (let i = 31; i <= TOTAL; i++) {
         const img = new Image()
         img.src = frameSrc(i)
       }
@@ -69,18 +69,18 @@ export function HeroScrollSequence({ scrollYProgress, alt }: Props) {
   useEffect(() => {
     if (mode !== 'sequence') return
     return scrollYProgress.on('change', (v) => {
-      const n = Math.max(1, Math.min(TOTAL, Math.round(TOTAL - v * (TOTAL - 1))))
+      const n = Math.max(1, Math.min(TOTAL, Math.round(1 + v * (TOTAL - 1))))
       if (imgRef.current) imgRef.current.src = frameSrc(n)
     })
   }, [scrollYProgress, mode])
 
-  // SSR + pre-hydration: render frame_192 via next/image so the browser gets
+  // SSR + pre-hydration: render frame_001 via next/image so the browser gets
   // a <link rel="preload"> hint for it before the client detects the mode.
   if (mode === 'pending') {
     return (
       <div className="absolute inset-0 bg-mushroom">
         <NextImage
-          src={frameSrc(TOTAL)}
+          src={frameSrc(1)}
           alt={alt}
           fill
           priority
@@ -128,12 +128,12 @@ export function HeroScrollSequence({ scrollYProgress, alt }: Props) {
   }
 
   // Scroll sequence: plain <img> whose src is updated on each scroll tick.
-  // frame_192 is already cached from the pending-mode preload above.
+  // frame_001 is already cached from the pending-mode preload above.
   return (
     <div className="absolute inset-0 bg-mushroom">
       <img
         ref={imgRef}
-        src={frameSrc(TOTAL)}
+        src={frameSrc(1)}
         alt={alt}
         className="absolute inset-0 w-full h-full object-cover object-center"
       />

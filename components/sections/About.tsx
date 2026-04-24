@@ -1,7 +1,14 @@
 'use client'
 
 import { useRef } from 'react'
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+  useMotionTemplate,
+} from 'framer-motion'
+import type { MotionValue } from 'framer-motion'
 import type { AboutContent } from '@/lib/content/home'
 
 const VARIANTS = {
@@ -14,19 +21,55 @@ const BASE_TRANSITION = {
   ease: [0.22, 0.61, 0.36, 1] as const,
 }
 
+// Each word lives in its own component so useTransform can be called legally
+// (React hooks cannot be called inside .map() callbacks).
+function Word({
+  word,
+  index,
+  total,
+  progress,
+}: {
+  word: string
+  index: number
+  total: number
+  progress: MotionValue<number>
+}) {
+  const start = 0.1 + (index / total) * 0.6
+  const end = 0.15 + (index / total) * 0.6
+  const opacity = useTransform(progress, [start, end], [0.3, 1.0])
+  return (
+    <motion.span style={{ opacity }} className="inline">
+      {word}{' '}
+    </motion.span>
+  )
+}
+
 export function About({ paragraph, portraitAlt, signature, tagline }: AboutContent) {
   const reduced = useReducedMotion()
+  const aboutRef = useRef<HTMLElement>(null)
   const portraitRef = useRef<HTMLDivElement>(null)
+
+  // Portrait Y parallax (existing)
   const { scrollYProgress: portraitProgress } = useScroll({
     target: portraitRef,
     offset: ['start end', 'end start'],
   })
   const portraitY = useTransform(portraitProgress, [0, 1], ['24px', '-24px'])
 
+  // Section-wide progress drives portrait scale+saturation and word reveal
+  const { scrollYProgress: aboutProgress } = useScroll({
+    target: aboutRef,
+    offset: ['start end', 'end center'],
+  })
+  const portraitScale = useTransform(aboutProgress, [0, 0.5], [0.94, 1.0])
+  const portraitSaturation = useTransform(aboutProgress, [0, 0.5], [0.85, 1.0])
+  const portraitFilter = useMotionTemplate`saturate(${portraitSaturation})`
+
   const initial = reduced ? 'visible' : 'hidden'
+  const words = paragraph.split(' ')
 
   return (
-    <section className="bg-bone py-section-lg" aria-labelledby="about-heading">
+    <section ref={aboutRef} className="bg-bone py-section-lg" aria-labelledby="about-heading">
       <h2 id="about-heading" className="sr-only">על הסטודיו</h2>
       <div className="max-w-container mx-auto px-[6vw]">
         {/*
@@ -46,7 +89,17 @@ export function About({ paragraph, portraitAlt, signature, tagline }: AboutConte
             transition={BASE_TRANSITION}
           >
             <p className="font-serif text-body-l text-espresso max-w-[52ch]">
-              {paragraph}
+              {reduced
+                ? paragraph
+                : words.map((word, i) => (
+                    <Word
+                      key={i}
+                      word={word}
+                      index={i}
+                      total={words.length}
+                      progress={aboutProgress}
+                    />
+                  ))}
             </p>
             <p
               className="mt-12 font-latin font-light text-display-l text-walnut tracking-[0.04em]"
@@ -73,7 +126,11 @@ export function About({ paragraph, portraitAlt, signature, tagline }: AboutConte
               className="relative aspect-[4/5] bg-mushroom overflow-hidden"
               role="img"
               aria-label={portraitAlt}
-              style={reduced ? {} : { y: portraitY }}
+              style={
+                reduced
+                  ? {}
+                  : { y: portraitY, scale: portraitScale, filter: portraitFilter }
+              }
             >
               <span className="absolute top-4 start-4 text-small text-taupe select-none">
                 תמונת דיוקן תתווסף
