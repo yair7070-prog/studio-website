@@ -45,7 +45,7 @@ const jsonLd = {
   telephone: '+972542616415',
   email: 'awds.adiw@gmail.com',
   url: 'https://awinteriors.co.il',
-  sameAs: ['https://www.instagram.com/a.w_interiordesign_/'],
+  sameAs: ['https://www.instagram.com/a.w_designstudio'],
   inLanguage: 'he-IL',
 }
 

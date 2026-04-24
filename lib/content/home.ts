@@ -63,7 +63,7 @@ export const footer: FooterContent = {
   phone: '054-261-6415',
   phoneHref: 'tel:+972542616415',
   email: 'awds.adiw@gmail.com',
-  instagram: 'https://www.instagram.com/a.w_interiordesign_/',
+  instagram: 'https://www.instagram.com/a.w_designstudio',
   copyright: '© 2026 a.w interior design',
 }
 
@@ -71,7 +71,7 @@ export const footer: FooterContent = {
 
 export const about: AboutContent = {
   paragraph:
-    'אני מעצבת פנים עם גישה מעשית ורגועה. העבודה שלי מתחילה בהקשבה. לחיי היום־יום של המשפחה, להעדפות שלא תמיד מדוברות, ולפער שלרוב קיים בין שני בני הזוג. משם נבנה בית שמרגיש אישי, נכון, ולא מעוצב לראווה. כל החלטה מוסברת. כל שלב מלווה באופן אישי. בשביל זה אני כאן.',
+    'העיצוב עבורי הוא כלי ליצירת סביבה נעימה, הרמונית ופונקציונלית שנשארת רלוונטית לאורך זמן. שמי עדי וינשטין, הנדסאית אדריכלות ומעצבת פנים בוגרת הפקולטה לאדריכלות ועיצוב פנים בשנקר. מתמחה בעיצוב מודרני-מינימליסטי, ויוצרת סביבת מגורים מעודנת ופונקציונאלית שמעשירה את חווית היום יום. אני מלווה לקוחות בתהליך מקצועי שמעניק שקט נפשי וביטחון בכל שלב — מהתכנון ועד הפרטים הקטנים. בשביל זה אני כאן.',
   portraitAlt: 'דיוקן סביבתי של המעצבת',
   signature: 'Adi Weinstein',
   tagline: 'מוציאה את המקסימום מכל סטנדרט.',
@@ -215,7 +215,7 @@ export const finalCTA: FinalCTAContent = {
     submit:           'שליחה',
     submitting:       'שולח...',
     alternativesLabel: 'או בדרך אחרת',
-    whatsapp: { label: 'וואטסאפ', href: 'https://wa.me/972542616415' },
+    whatsapp: { label: 'וואטסאפ', href: 'https://bit.ly/44t0UwS' },
     phone:    { label: 'טלפון',    href: 'tel:+972542616415' },
     errors: {
       required:     'שדה חובה',
