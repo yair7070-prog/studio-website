@@ -23,8 +23,8 @@ export default function HomePage() {
   return (
     <main id="main-content">
       <Hero              {...hero} />
-      <PositioningStrip  {...positioningStrip} />
       <About             {...about} />
+      <PositioningStrip  {...positioningStrip} />
       <ServicesAccordion eyebrow={services.eyebrow} items={services.items} />
       <SelectedProjects  {...projects} />
       <Process           {...process} />

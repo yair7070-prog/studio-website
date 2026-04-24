@@ -36,7 +36,7 @@ function Word({
 }) {
   const start = 0.1 + (index / total) * 0.6
   const end = 0.15 + (index / total) * 0.6
-  const opacity = useTransform(progress, [start, end], [0.3, 1.0])
+  const opacity = useTransform(progress, [start, end], [0.55, 1.0])
   return (
     <motion.span style={{ opacity }} className="inline">
       {word}{' '}
