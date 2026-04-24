@@ -15,7 +15,7 @@ function frameSrc(n: number) {
   return `/hero-frames/frame_${String(n).padStart(3, '0')}.webp`
 }
 
-type Mode = 'pending' | 'mobile' | 'reduced' | 'sequence'
+type Mode = 'mobile' | 'reduced' | 'sequence'
 
 function Gradient() {
   return (
@@ -29,28 +29,35 @@ function Gradient() {
 }
 
 export function HeroScrollSequence({ scrollYProgress, alt }: Props) {
-  const [mode, setMode] = useState<Mode>('pending')
+  // Strict mounted flag — same pattern as IntroLoader and Cursor.
+  // Before mount: SSR and client first-paint are identical (no browser APIs,
+  // no Framer Motion scroll state). After mount: real mode is detected.
+  const [mounted, setMounted] = useState(false)
+  const [mode, setMode] = useState<Mode>('sequence')
   const imgRef = useRef<HTMLImageElement>(null)
 
-  // Detect environment after mount — prevents SSR hydration mismatch
+  // All hooks called unconditionally at top level (React rules of hooks)
+  useEffect(() => { setMounted(true) }, [])
+
   useEffect(() => {
+    if (!mounted) return
     const mobile = !window.matchMedia('(min-width: 768px)').matches
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     setMode(mobile ? 'mobile' : reduced ? 'reduced' : 'sequence')
-  }, [])
+  }, [mounted])
 
-  // Preload first 30 visible frames (001→030) immediately
+  // Preload first 30 visible frames (001→030)
   useEffect(() => {
-    if (mode !== 'sequence') return
+    if (!mounted || mode !== 'sequence') return
     for (let i = 1; i <= 30; i++) {
       const img = new Image()
       img.src = frameSrc(i)
     }
-  }, [mode])
+  }, [mounted, mode])
 
   // Lazy-preload remaining frames (031→192) once the page settles
   useEffect(() => {
-    if (mode !== 'sequence') return
+    if (!mounted || mode !== 'sequence') return
     const load = () => {
       for (let i = 31; i <= TOTAL; i++) {
         const img = new Image()
@@ -63,20 +70,21 @@ export function HeroScrollSequence({ scrollYProgress, alt }: Props) {
     }
     const id = setTimeout(load, 2000)
     return () => clearTimeout(id)
-  }, [mode])
+  }, [mounted, mode])
 
   // Drive frame swaps from scroll position
   useEffect(() => {
-    if (mode !== 'sequence') return
+    if (!mounted || mode !== 'sequence') return
     return scrollYProgress.on('change', (v) => {
       const n = Math.max(1, Math.min(TOTAL, Math.round(1 + v * (TOTAL - 1))))
       if (imgRef.current) imgRef.current.src = frameSrc(n)
     })
-  }, [scrollYProgress, mode])
+  }, [scrollYProgress, mounted, mode])
 
-  // SSR + pre-hydration: render frame_001 via next/image so the browser gets
-  // a <link rel="preload"> hint for it before the client detects the mode.
-  if (mode === 'pending') {
+  // ── Before mount ────────────────────────────────────────────────────────────
+  // Renders identically on server and client first-paint.
+  // next/image with priority adds <link rel="preload"> for frame_001 (LCP hint).
+  if (!mounted) {
     return (
       <div className="absolute inset-0 bg-mushroom">
         <NextImage
@@ -94,7 +102,9 @@ export function HeroScrollSequence({ scrollYProgress, alt }: Props) {
     )
   }
 
-  // Mobile: fall back to the static hero image, no scroll sequence
+  // ── After mount ─────────────────────────────────────────────────────────────
+
+  // Mobile: static hero image, no scroll sequence
   if (mode === 'mobile') {
     return (
       <div className="absolute inset-0 bg-mushroom">
@@ -128,7 +138,7 @@ export function HeroScrollSequence({ scrollYProgress, alt }: Props) {
   }
 
   // Scroll sequence: plain <img> whose src is updated on each scroll tick.
-  // frame_001 is already cached from the pending-mode preload above.
+  // frame_001 is already cached from the pre-mount NextImage preload above.
   return (
     <div className="absolute inset-0 bg-mushroom">
       <img

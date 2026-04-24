@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   motion,
   useReducedMotion,
@@ -21,8 +21,8 @@ const BASE_TRANSITION = {
   ease: [0.22, 0.61, 0.36, 1] as const,
 }
 
-// Each word lives in its own component so useTransform can be called legally
-// (React hooks cannot be called inside .map() callbacks).
+// Each word is its own component so useTransform is called at component
+// top-level (React rules of hooks prohibit hook calls inside .map()).
 function Word({
   word,
   index,
@@ -45,18 +45,26 @@ function Word({
 }
 
 export function About({ paragraph, portraitAlt, signature, tagline }: AboutContent) {
+  // All hooks unconditionally at top level
   const reduced = useReducedMotion()
   const aboutRef = useRef<HTMLElement>(null)
   const portraitRef = useRef<HTMLDivElement>(null)
 
-  // Portrait Y parallax (existing)
+  // mounted flag — same pattern as IntroLoader and Cursor.
+  // Scroll-linked styles and word reveal only activate after mount so that
+  // the SSR output (no scroll state) matches the client first-paint exactly.
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => { setMounted(true) }, [])
+
+  // Portrait Y parallax (pre-existing, SSR-safe: y at scroll=0 is '24px'
+  // which Framer Motion serializes consistently on server and client)
   const { scrollYProgress: portraitProgress } = useScroll({
     target: portraitRef,
     offset: ['start end', 'end start'],
   })
   const portraitY = useTransform(portraitProgress, [0, 1], ['24px', '-24px'])
 
-  // Section-wide progress drives portrait scale+saturation and word reveal
+  // Section-wide progress — only consumed after mount to prevent mismatch
   const { scrollYProgress: aboutProgress } = useScroll({
     target: aboutRef,
     offset: ['start end', 'end center'],
@@ -67,6 +75,11 @@ export function About({ paragraph, portraitAlt, signature, tagline }: AboutConte
 
   const initial = reduced ? 'visible' : 'hidden'
   const words = paragraph.split(' ')
+
+  // After mount and no reduced-motion preference: activate scroll animations.
+  // Before mount (SSR + first client paint): render exactly what existed
+  // before these scroll features were added — no mismatch possible.
+  const animate = mounted && !reduced
 
   return (
     <section ref={aboutRef} className="bg-bone py-section-lg" aria-labelledby="about-heading">
@@ -89,9 +102,8 @@ export function About({ paragraph, portraitAlt, signature, tagline }: AboutConte
             transition={BASE_TRANSITION}
           >
             <p className="font-serif text-body-l text-espresso max-w-[52ch]">
-              {reduced
-                ? paragraph
-                : words.map((word, i) => (
+              {animate
+                ? words.map((word, i) => (
                     <Word
                       key={i}
                       word={word}
@@ -99,7 +111,8 @@ export function About({ paragraph, portraitAlt, signature, tagline }: AboutConte
                       total={words.length}
                       progress={aboutProgress}
                     />
-                  ))}
+                  ))
+                : paragraph}
             </p>
             <p
               className="mt-12 font-latin font-light text-display-l text-walnut tracking-[0.04em]"
@@ -129,7 +142,9 @@ export function About({ paragraph, portraitAlt, signature, tagline }: AboutConte
               style={
                 reduced
                   ? {}
-                  : { y: portraitY, scale: portraitScale, filter: portraitFilter }
+                  : animate
+                  ? { y: portraitY, scale: portraitScale, filter: portraitFilter }
+                  : { y: portraitY }
               }
             >
               <span className="absolute top-4 start-4 text-small text-taupe select-none">
