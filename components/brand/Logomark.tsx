@@ -1,20 +1,18 @@
 import Image from 'next/image'
 
 export interface LogomarkProps {
-  variant?: 'original' | 'espresso' | 'bone'
   size?: number
+  priority?: boolean
+  applyFilter?: boolean
   className?: string
-}
-
-const tintFilter: Record<NonNullable<LogomarkProps['variant']>, string> = {
-  original: 'none',
-  espresso: 'brightness(0) saturate(100%) invert(11%) sepia(17%) saturate(1100%) hue-rotate(350deg) brightness(95%) contrast(88%)',
-  bone: 'brightness(0) saturate(100%) invert(94%) sepia(8%) saturate(250%) hue-rotate(10deg) brightness(100%) contrast(92%)',
+  /** @deprecated — kept for backward compatibility; has no effect */
+  variant?: 'original' | 'espresso' | 'bone'
 }
 
 export default function Logomark({
-  variant = 'original',
-  size = 40,
+  size = 80,
+  priority = false,
+  applyFilter = false,
   className = '',
 }: LogomarkProps) {
   return (
@@ -23,9 +21,13 @@ export default function Logomark({
       alt="a.w interior design"
       width={655}
       height={627}
-      priority
+      priority={priority}
       className={className}
-      style={{ filter: tintFilter[variant], height: size, width: 'auto' }}
+      style={{
+        filter: applyFilter ? 'brightness(0.85) saturate(1.15)' : 'none',
+        height: size,
+        width: 'auto',
+      }}
     />
   )
 }

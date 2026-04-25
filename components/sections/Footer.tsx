@@ -29,7 +29,12 @@ export function Footer({ phone, phoneHref, email, instagram, copyright }: Footer
 
           {/* Zone 1: Logo */}
           <div className="flex-shrink-0 md:pe-10">
-            <Logomark variant="original" size={48} />
+            <div className="md:hidden">
+              <Logomark size={72} />
+            </div>
+            <div className="hidden md:block">
+              <Logomark size={96} />
+            </div>
             <span className="sr-only">a.w interior design — Adi Weinstein</span>
           </div>
 

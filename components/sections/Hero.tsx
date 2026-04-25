@@ -103,18 +103,21 @@ export function Hero({ positioning, cta, imageAlt }: HeroContent) {
           הדמיה
         </span>
 
-        {/* ── Logomark — top-end (left in RTL) ───────────────────────── */}
-        <div className="absolute top-0 end-0 pe-[8vw] pt-[6vw] md:pe-[6vw]">
-          <div className="flex flex-col items-end gap-2">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={ready ? { opacity: 1 } : { opacity: 0 }}
-              transition={{ duration: 0.6, delay: 0.3, ease: EASE }}
-            >
-              <Logomark variant="bone" size={60} />
-            </motion.div>
+        {/* ── Logomark — top-end (left in RTL), 24px inset, z above sequence ── */}
+        <div className="absolute top-6 end-6 z-10">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={ready ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: 0.6, delay: 0.3, ease: EASE }}
+          >
+            <div className="md:hidden">
+              <Logomark size={64} priority applyFilter />
+            </div>
+            <div className="hidden md:block">
+              <Logomark size={80} priority applyFilter />
+            </div>
             <span className="sr-only">a.w interior design — Adi Weinstein</span>
-          </div>
+          </motion.div>
         </div>
 
         {/* ── Content block — bottom-start (right in RTL) + scroll parallax */}

@@ -9,6 +9,7 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 const EASE = [0.22, 0.61, 0.36, 1] as const
 import type { FinalCTAContent } from '@/lib/content/home'
 import { submitLead } from '@/lib/leads'
+import Logomark from '@/components/brand/Logomark'
 import { Field } from '@/components/form/Field'
 import { Select } from '@/components/form/Select'
 import { Textarea } from '@/components/form/Textarea'
@@ -113,6 +114,15 @@ export function FinalCTA({
               animate={{ opacity: 1 }}
               transition={{ duration: reduced ? 0 : 0.4, ease: [0.22, 0.61, 0.36, 1] }}
             >
+              {/* Brand mark — centered above headline, 32px below */}
+              <div className="flex justify-center mb-8">
+                <div className="md:hidden">
+                  <Logomark size={56} />
+                </div>
+                <div className="hidden md:block">
+                  <Logomark size={64} />
+                </div>
+              </div>
               <h3 className="font-serif text-display-l text-espresso">
                 {success.headline}
               </h3>
