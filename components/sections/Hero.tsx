@@ -111,7 +111,7 @@ export function Hero({ positioning, cta, imageAlt }: HeroContent) {
               animate={ready ? { opacity: 1 } : { opacity: 0 }}
               transition={{ duration: 0.6, delay: 0.3, ease: EASE }}
             >
-              <Logomark variant="original" size={56} />
+              <Logomark variant="bone" size={60} />
             </motion.div>
             <span className="sr-only">a.w interior design — Adi Weinstein</span>
           </div>

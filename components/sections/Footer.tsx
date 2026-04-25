@@ -6,76 +6,73 @@ import type { FooterContent } from '@/lib/content/home'
 
 const EASE = [0.22, 0.61, 0.36, 1] as const
 
-export function Footer({ region, phone, phoneHref, email, instagram, copyright }: FooterContent) {
+export function Footer({ phone, phoneHref, email, instagram, copyright }: FooterContent) {
   const reduced = useReducedMotion()
 
   return (
     <motion.footer
-      className="bg-bone py-section-sm border-t border-mushroom"
+      className="bg-sand py-10 border-t border-mushroom"
       initial={reduced ? { opacity: 1 } : { opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true, margin: '-15%' }}
       transition={{ duration: 0.4, ease: EASE }}
     >
       <div className="max-w-container mx-auto px-[6vw]">
-        {/* Top row */}
-        <div className="flex justify-between items-start">
-          <div className="flex flex-col items-start gap-2">
-            <Logomark variant="original" size={36} />
+        {/*
+          RTL three-zone row:
+            Zone 1 (reading-start = right) — logo
+            Zone 2 (center)               — phone / email / instagram
+            Zone 3 (reading-end = left)   — copyright
+          Mobile: stacks vertically, hairlines hidden.
+        */}
+        <div className="flex flex-col gap-8 md:flex-row md:items-center md:gap-0">
+
+          {/* Zone 1: Logo */}
+          <div className="flex-shrink-0 md:pe-10">
+            <Logomark variant="original" size={48} />
             <span className="sr-only">a.w interior design — Adi Weinstein</span>
           </div>
-          <div className="flex flex-col gap-2 text-end">
-            <span className="text-small text-taupe">{region}</span>
+
+          {/* Vertical hairline — desktop only */}
+          <div className="hidden md:block self-stretch w-px bg-walnut/35" aria-hidden="true" />
+
+          {/* Zone 2: Contact */}
+          <div className="flex-1 flex flex-col gap-3 md:flex-row md:items-center md:justify-center md:gap-0">
             <a
               href={phoneHref}
-              className="text-small text-taupe hover:text-walnut transition-colors duration-300 ease-paper py-2 -my-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-walnut focus-visible:ring-offset-2 focus-visible:ring-offset-bone"
+              className="font-serif text-body-s text-taupe hover:text-walnut transition-colors duration-300 ease-paper focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-walnut focus-visible:ring-offset-2 focus-visible:ring-offset-sand md:px-6"
             >
               <span dir="ltr" className="tabular-nums">{phone}</span>
             </a>
+            <div className="hidden md:block w-px h-4 bg-walnut/30" aria-hidden="true" />
             <a
               href={`mailto:${email}`}
-              className="text-small text-taupe hover:text-walnut transition-colors duration-300 ease-paper py-2 -my-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-walnut focus-visible:ring-offset-2 focus-visible:ring-offset-bone"
+              className="font-serif text-body-s text-taupe hover:text-walnut transition-colors duration-300 ease-paper focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-walnut focus-visible:ring-offset-2 focus-visible:ring-offset-sand md:px-6"
             >
               {email}
             </a>
-          </div>
-        </div>
-
-        {/* Hairline — fades in as footer scrolls into view */}
-        <motion.div
-          className="mt-12 mb-6 h-px bg-stone"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 0.4 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: EASE }}
-        />
-
-        {/* Bottom row */}
-        <div className="flex justify-between items-center">
-          <span className="text-small text-taupe">{copyright}</span>
-          <a
-            href={instagram}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 text-small text-taupe hover:text-walnut transition-colors duration-300 ease-paper py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-walnut focus-visible:ring-offset-2 focus-visible:ring-offset-bone"
-          >
-            <span dir="ltr">@a.w_designstudio</span>
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
+            <div className="hidden md:block w-px h-4 bg-walnut/30" aria-hidden="true" />
+            <a
+              href={instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              dir="ltr"
+              className="font-latin text-body-s text-taupe hover:text-walnut transition-colors duration-300 ease-paper focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-walnut focus-visible:ring-offset-2 focus-visible:ring-offset-sand md:px-6"
             >
-              <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-              <circle cx="12" cy="12" r="5" />
-              <circle cx="17.5" cy="6.5" r="1.5" />
-            </svg>
-          </a>
+              @a.w_designstudio
+            </a>
+          </div>
+
+          {/* Vertical hairline — desktop only */}
+          <div className="hidden md:block self-stretch w-px bg-walnut/35" aria-hidden="true" />
+
+          {/* Zone 3: Copyright */}
+          <div className="flex-shrink-0 md:ps-10">
+            <span className="font-latin text-[10px] tracking-[0.14em] uppercase text-taupe/60">
+              {copyright}
+            </span>
+          </div>
+
         </div>
       </div>
     </motion.footer>

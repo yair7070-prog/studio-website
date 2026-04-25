@@ -13,16 +13,16 @@ const tintFilter: Record<NonNullable<LogomarkProps['variant']>, string> = {
 }
 
 export default function Logomark({
-  variant = 'espresso',
+  variant = 'original',
   size = 40,
   className = '',
 }: LogomarkProps) {
   return (
     <Image
-      src="/brand/aw-monogram.png"
+      src="/brand/aw-logo-walnut.png"
       alt="a.w interior design"
-      width={size}
-      height={size}
+      width={655}
+      height={627}
       priority
       className={className}
       style={{ filter: tintFilter[variant], height: size, width: 'auto' }}
