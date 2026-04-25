@@ -90,6 +90,24 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
       el?.scrollIntoView({ block: 'nearest' })
     }, [activeIndex, isOpen])
 
+    /* Bidirectional sync — propagate programmatic/autofill changes on the
+       hidden native select back to React state and RHF. User-click path
+       goes through commit() which sets the value directly without dispatching
+       a native event, so this listener won't double-fire on normal interactions. */
+    useEffect(() => {
+      const select = hiddenRef.current
+      if (!select) return
+      const handleNativeChange = (e: Event) => {
+        const target = e.target as HTMLSelectElement
+        if (target.value !== selectedValue) {
+          setSelected(target.value)
+          onChange?.({ target } as React.ChangeEvent<HTMLSelectElement>)
+        }
+      }
+      select.addEventListener('change', handleNativeChange)
+      return () => select.removeEventListener('change', handleNativeChange)
+    }, [selectedValue, onChange])
+
     const openAt = useCallback((idx: number) => {
       setIsOpen(true)
       setActive(idx)

@@ -348,7 +348,7 @@ export const process: ProcessContent = {
 }
 
 export const testimonials: TestimonialsContent = {
-  eyebrow: 'ממטופלים',
+  eyebrow: 'עדויות',
   items: [
     {
       id: 't1',
