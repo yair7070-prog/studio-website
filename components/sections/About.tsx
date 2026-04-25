@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
 import {
   motion,
   useReducedMotion,
@@ -10,6 +11,7 @@ import {
 } from 'framer-motion'
 import type { MotionValue } from 'framer-motion'
 import type { AboutContent } from '@/lib/content/home'
+import { MIXED_MEDIA } from '@/lib/assets/mixedMedia'
 
 const VARIANTS = {
   hidden: { opacity: 0, y: 16 },
@@ -48,7 +50,9 @@ export function About({ paragraph, portraitAlt, signature, tagline }: AboutConte
   // All hooks unconditionally at top level
   const reduced = useReducedMotion()
   const aboutRef = useRef<HTMLElement>(null)
-  const portraitRef = useRef<HTMLDivElement>(null)
+  const portraitRef     = useRef<HTMLDivElement>(null)
+  const travertineRef   = useRef<HTMLDivElement>(null)
+  const bowlRef         = useRef<HTMLDivElement>(null)
 
   // mounted flag — same pattern as IntroLoader and Cursor.
   // Scroll-linked styles and word reveal only activate after mount so that
@@ -63,6 +67,18 @@ export function About({ paragraph, portraitAlt, signature, tagline }: AboutConte
     offset: ['start end', 'end start'],
   })
   const portraitY = useTransform(portraitProgress, [0, 1], ['24px', '-24px'])
+
+  const { scrollYProgress: travertineProgress } = useScroll({
+    target: travertineRef,
+    offset: ['start end', 'end start'],
+  })
+  const travertineY = useTransform(travertineProgress, [0, 1], ['16px', '-16px'])
+
+  const { scrollYProgress: bowlProgress } = useScroll({
+    target: bowlRef,
+    offset: ['start end', 'end start'],
+  })
+  const bowlY = useTransform(bowlProgress, [0, 1], ['-12px', '12px'])
 
   // Section-wide progress — only consumed after mount to prevent mismatch
   const { scrollYProgress: aboutProgress } = useScroll({
@@ -123,20 +139,52 @@ export function About({ paragraph, portraitAlt, signature, tagline }: AboutConte
             <p className="mt-12 font-serif text-body-m text-taupe tracking-[0.04em] max-w-[36ch]">
               {tagline}
             </p>
+            <div className="mt-6 pointer-events-none" aria-hidden="true">
+              <Image
+                src={MIXED_MEDIA.marks.bayitSignature.src}
+                alt=""
+                width={MIXED_MEDIA.marks.bayitSignature.width}
+                height={MIXED_MEDIA.marks.bayitSignature.height}
+                style={{ width: 150, height: 'auto', opacity: 0.7 }}
+              />
+            </div>
           </motion.div>
 
-          {/* Portrait — reading-end (left in RTL) */}
+          {/* Portrait — reading-end (left in RTL), with floating marks */}
           <motion.div
             ref={portraitRef}
-            className="col-span-12 md:col-start-8 md:col-span-4"
+            className="col-span-12 md:col-start-8 md:col-span-4 relative"
             variants={VARIANTS}
             initial={initial}
             whileInView="visible"
             viewport={{ once: true, margin: '-20%' }}
             transition={{ ...BASE_TRANSITION, delay: reduced ? 0 : 0.12 }}
           >
+            {/* Travertine slab — absolute left, mid-height, behind portrait */}
             <motion.div
-              className="relative aspect-[4/5] bg-mushroom overflow-hidden"
+              ref={travertineRef}
+              className="absolute hidden md:block z-10 pointer-events-none"
+              style={{
+                left: '-28px',
+                top: '30%',
+                width: '38%',
+                y: animate ? travertineY : '0px',
+              }}
+            >
+              <Image
+                src={MIXED_MEDIA.marks.travertineSlab.src}
+                alt=""
+                aria-hidden="true"
+                width={MIXED_MEDIA.marks.travertineSlab.width}
+                height={MIXED_MEDIA.marks.travertineSlab.height}
+                className="w-full h-auto"
+                style={{ opacity: 0.85 }}
+              />
+            </motion.div>
+
+            {/* Portrait image */}
+            <motion.div
+              className="relative aspect-[4/5] overflow-hidden z-20"
               role="img"
               aria-label={portraitAlt}
               style={
@@ -147,9 +195,37 @@ export function About({ paragraph, portraitAlt, signature, tagline }: AboutConte
                   : { y: portraitY }
               }
             >
-              <span className="absolute top-4 start-4 text-small text-taupe select-none">
-                תמונת דיוקן תתווסף
-              </span>
+              <Image
+                src={MIXED_MEDIA.portraits.primary.src}
+                alt={portraitAlt}
+                fill
+                sizes="(max-width: 768px) 100vw, 33vw"
+                className="object-cover"
+                priority
+              />
+            </motion.div>
+
+            {/* Bowl polaroid — overlaps top-left corner of portrait */}
+            <motion.div
+              ref={bowlRef}
+              className="absolute hidden md:block z-30 pointer-events-none"
+              style={{
+                left: '-12%',
+                top: '-5%',
+                width: '42%',
+                rotate: -6,
+                y: animate ? bowlY : '0px',
+              }}
+            >
+              <Image
+                src={MIXED_MEDIA.marks.bowlPolaroid.src}
+                alt=""
+                aria-hidden="true"
+                width={MIXED_MEDIA.marks.bowlPolaroid.width}
+                height={MIXED_MEDIA.marks.bowlPolaroid.height}
+                className="w-full h-auto"
+                style={{ filter: 'drop-shadow(0 4px 12px rgba(43,36,32,0.12))' }}
+              />
             </motion.div>
           </motion.div>
 

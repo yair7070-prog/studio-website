@@ -1,0 +1,8 @@
+ M components/sections/About.tsx
+ M components/sections/FinalCTA.tsx
+ M components/sections/Process.tsx
+ M components/sections/ServicesAccordion.tsx
+?? _handoff/
+?? lib/assets/
+?? public/assets/
+?? tsconfig.tsbuildinfo

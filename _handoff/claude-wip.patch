@@ -1,0 +1,488 @@
+diff --git a/components/sections/About.tsx b/components/sections/About.tsx
+index 7f7b7c1..fe54c82 100644
+--- a/components/sections/About.tsx
++++ b/components/sections/About.tsx
+@@ -1,6 +1,7 @@
+ 'use client'
+ 
+ import { useEffect, useRef, useState } from 'react'
++import Image from 'next/image'
+ import {
+   motion,
+   useReducedMotion,
+@@ -10,6 +11,7 @@ import {
+ } from 'framer-motion'
+ import type { MotionValue } from 'framer-motion'
+ import type { AboutContent } from '@/lib/content/home'
++import { MIXED_MEDIA } from '@/lib/assets/mixedMedia'
+ 
+ const VARIANTS = {
+   hidden: { opacity: 0, y: 16 },
+@@ -48,7 +50,9 @@ export function About({ paragraph, portraitAlt, signature, tagline }: AboutConte
+   // All hooks unconditionally at top level
+   const reduced = useReducedMotion()
+   const aboutRef = useRef<HTMLElement>(null)
+-  const portraitRef = useRef<HTMLDivElement>(null)
++  const portraitRef     = useRef<HTMLDivElement>(null)
++  const travertineRef   = useRef<HTMLDivElement>(null)
++  const bowlRef         = useRef<HTMLDivElement>(null)
+ 
+   // mounted flag — same pattern as IntroLoader and Cursor.
+   // Scroll-linked styles and word reveal only activate after mount so that
+@@ -64,6 +68,18 @@ export function About({ paragraph, portraitAlt, signature, tagline }: AboutConte
+   })
+   const portraitY = useTransform(portraitProgress, [0, 1], ['24px', '-24px'])
+ 
++  const { scrollYProgress: travertineProgress } = useScroll({
++    target: travertineRef,
++    offset: ['start end', 'end start'],
++  })
++  const travertineY = useTransform(travertineProgress, [0, 1], ['16px', '-16px'])
++
++  const { scrollYProgress: bowlProgress } = useScroll({
++    target: bowlRef,
++    offset: ['start end', 'end start'],
++  })
++  const bowlY = useTransform(bowlProgress, [0, 1], ['-12px', '12px'])
++
+   // Section-wide progress — only consumed after mount to prevent mismatch
+   const { scrollYProgress: aboutProgress } = useScroll({
+     target: aboutRef,
+@@ -123,20 +139,52 @@ export function About({ paragraph, portraitAlt, signature, tagline }: AboutConte
+             <p className="mt-12 font-serif text-body-m text-taupe tracking-[0.04em] max-w-[36ch]">
+               {tagline}
+             </p>
++            <div className="mt-6 pointer-events-none" aria-hidden="true">
++              <Image
++                src={MIXED_MEDIA.marks.bayitSignature.src}
++                alt=""
++                width={MIXED_MEDIA.marks.bayitSignature.width}
++                height={MIXED_MEDIA.marks.bayitSignature.height}
++                style={{ width: 150, height: 'auto', opacity: 0.7 }}
++              />
++            </div>
+           </motion.div>
+ 
+-          {/* Portrait — reading-end (left in RTL) */}
++          {/* Portrait — reading-end (left in RTL), with floating marks */}
+           <motion.div
+             ref={portraitRef}
+-            className="col-span-12 md:col-start-8 md:col-span-4"
++            className="col-span-12 md:col-start-8 md:col-span-4 relative"
+             variants={VARIANTS}
+             initial={initial}
+             whileInView="visible"
+             viewport={{ once: true, margin: '-20%' }}
+             transition={{ ...BASE_TRANSITION, delay: reduced ? 0 : 0.12 }}
+           >
++            {/* Travertine slab — absolute left, mid-height, behind portrait */}
++            <motion.div
++              ref={travertineRef}
++              className="absolute hidden md:block z-10 pointer-events-none"
++              style={{
++                left: '-28px',
++                top: '30%',
++                width: '38%',
++                y: animate ? travertineY : '0px',
++              }}
++            >
++              <Image
++                src={MIXED_MEDIA.marks.travertineSlab.src}
++                alt=""
++                aria-hidden="true"
++                width={MIXED_MEDIA.marks.travertineSlab.width}
++                height={MIXED_MEDIA.marks.travertineSlab.height}
++                className="w-full h-auto"
++                style={{ opacity: 0.85 }}
++              />
++            </motion.div>
++
++            {/* Portrait image */}
+             <motion.div
+-              className="relative aspect-[4/5] bg-mushroom overflow-hidden"
++              className="relative aspect-[4/5] overflow-hidden z-20"
+               role="img"
+               aria-label={portraitAlt}
+               style={
+@@ -147,9 +195,37 @@ export function About({ paragraph, portraitAlt, signature, tagline }: AboutConte
+                   : { y: portraitY }
+               }
+             >
+-              <span className="absolute top-4 start-4 text-small text-taupe select-none">
+-                תמונת דיוקן תתווסף
+-              </span>
++              <Image
++                src={MIXED_MEDIA.portraits.primary.src}
++                alt={portraitAlt}
++                fill
++                sizes="(max-width: 768px) 100vw, 33vw"
++                className="object-cover"
++                priority
++              />
++            </motion.div>
++
++            {/* Bowl polaroid — overlaps top-left corner of portrait */}
++            <motion.div
++              ref={bowlRef}
++              className="absolute hidden md:block z-30 pointer-events-none"
++              style={{
++                left: '-12%',
++                top: '-5%',
++                width: '42%',
++                rotate: -6,
++                y: animate ? bowlY : '0px',
++              }}
++            >
++              <Image
++                src={MIXED_MEDIA.marks.bowlPolaroid.src}
++                alt=""
++                aria-hidden="true"
++                width={MIXED_MEDIA.marks.bowlPolaroid.width}
++                height={MIXED_MEDIA.marks.bowlPolaroid.height}
++                className="w-full h-auto"
++                style={{ filter: 'drop-shadow(0 4px 12px rgba(43,36,32,0.12))' }}
++              />
+             </motion.div>
+           </motion.div>
+ 
+diff --git a/components/sections/FinalCTA.tsx b/components/sections/FinalCTA.tsx
+index 70325c3..8fe892f 100644
+--- a/components/sections/FinalCTA.tsx
++++ b/components/sections/FinalCTA.tsx
+@@ -1,10 +1,12 @@
+ 'use client'
+ 
+-import { useState, useMemo } from 'react'
++import { useRef, useState, useMemo } from 'react'
++import Image from 'next/image'
+ import { useForm } from 'react-hook-form'
+ import { zodResolver } from '@hookform/resolvers/zod'
+ import { z } from 'zod'
+-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
++import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform } from 'framer-motion'
++import { MIXED_MEDIA } from '@/lib/assets/mixedMedia'
+ 
+ const EASE = [0.22, 0.61, 0.36, 1] as const
+ import type { FinalCTAContent } from '@/lib/content/home'
+@@ -42,6 +44,14 @@ export function FinalCTA({
+   const [submitted, setSubmitted] = useState(false)
+   const [submitError, setSubmitError] = useState<string | null>(null)
+   const reduced = useReducedMotion()
++  const sectionRef = useRef<HTMLElement>(null)
++  const pensiveRef  = useRef<HTMLDivElement>(null)
++
++  const { scrollYProgress: pensiveProgress } = useScroll({
++    target: pensiveRef,
++    offset: ['start end', 'end start'],
++  })
++  const pensiveY = useTransform(pensiveProgress, [0, 1], ['16px', '-16px'])
+ 
+   const schema = useMemo(() => createSchema(form.errors), [form.errors])
+ 
+@@ -65,8 +75,42 @@ export function FinalCTA({
+   }
+ 
+   return (
+-    <section id="lead-form" className="bg-sand py-section-xl" aria-labelledby="lead-form-title">
+-      <div className="max-w-container mx-auto px-[6vw]">
++    <section ref={sectionRef} id="lead-form" className="bg-sand py-section-xl relative overflow-hidden" aria-labelledby="lead-form-title">
++
++      {/* Pensive portrait — absolute left, parallax 0.95x, desktop only */}
++      <motion.div
++        ref={pensiveRef}
++        className="absolute hidden md:block top-[8%] pointer-events-none z-0"
++        style={{ left: '6vw', width: '18%', y: reduced ? '0px' : pensiveY }}
++        aria-hidden="true"
++      >
++        <Image
++          src={MIXED_MEDIA.portraits.pensive.src}
++          alt=""
++          width={MIXED_MEDIA.portraits.pensive.width}
++          height={MIXED_MEDIA.portraits.pensive.height}
++          className="w-full h-auto"
++          style={{ filter: 'drop-shadow(0 8px 24px rgba(43,36,32,0.12))' }}
++        />
++      </motion.div>
++
++      {/* Handwritten caption — sits ~24px below portrait bottom edge, desktop only */}
++      {/* TODO: replace with proper "אני קוראת כל פנייה" handwritten asset when generated */}
++      <div
++        className="absolute hidden md:block pointer-events-none z-0"
++        style={{ left: '6vw', top: 'calc(8% + 27vw + 24px)', width: 140, opacity: 0.7 }}
++        aria-hidden="true"
++      >
++        <Image
++          src={MIXED_MEDIA.marks.bayitSignature.src}
++          alt=""
++          width={MIXED_MEDIA.marks.bayitSignature.width}
++          height={MIXED_MEDIA.marks.bayitSignature.height}
++          className="w-full h-auto"
++        />
++      </div>
++
++      <div className="max-w-container mx-auto px-[6vw] relative z-10">
+ 
+         <motion.p
+           className="text-small text-taupe tracking-[0.08em]"
+@@ -78,6 +122,16 @@ export function FinalCTA({
+           {eyebrow}
+         </motion.p>
+         <div className="mt-12" />
++        {/* Pencil stroke — decorative mark above headline */}
++        <div className="mb-4 pointer-events-none" aria-hidden="true">
++          <Image
++            src={MIXED_MEDIA.marks.pencilStroke.src}
++            alt=""
++            width={MIXED_MEDIA.marks.pencilStroke.width}
++            height={MIXED_MEDIA.marks.pencilStroke.height}
++            style={{ width: 280, height: 'auto', opacity: 0.85 }}
++          />
++        </div>
+         <motion.h2
+           id="lead-form-title"
+           className="font-serif text-display-xl text-espresso"
+@@ -210,6 +264,16 @@ export function FinalCTA({
+                 )}
+ 
+                 <div>
++                  {/* 48-hours oval — decorative mark above submit button */}
++                  <div className="mb-4 pointer-events-none" aria-hidden="true">
++                    <Image
++                      src={MIXED_MEDIA.marks.hoursOval.src}
++                      alt=""
++                      width={MIXED_MEDIA.marks.hoursOval.width}
++                      height={MIXED_MEDIA.marks.hoursOval.height}
++                      style={{ width: 220, height: 'auto' }}
++                    />
++                  </div>
+                   <Button
+                     type="submit"
+                     loading={isSubmitting}
+diff --git a/components/sections/Process.tsx b/components/sections/Process.tsx
+index 9809519..fc6c488 100644
+--- a/components/sections/Process.tsx
++++ b/components/sections/Process.tsx
+@@ -1,8 +1,10 @@
+ 'use client'
+ 
+ import { useRef } from 'react'
++import Image from 'next/image'
+ import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
+ import type { ProcessContent } from '@/lib/content/home'
++import { MIXED_MEDIA } from '@/lib/assets/mixedMedia'
+ 
+ const EASE = [0.22, 0.61, 0.36, 1] as const
+ 
+@@ -11,9 +13,15 @@ const VARIANTS = {
+   visible: { opacity: 1, y: 0 },
+ }
+ 
++const DOC_FILTER = 'sepia(0.18) brightness(1.02) saturate(0.95) drop-shadow(0 4px 14px rgba(43,36,32,0.12))'
++
+ export function Process({ eyebrow, stages }: ProcessContent) {
+   const reduced = useReducedMotion()
+-  const sectionRef = useRef<HTMLElement>(null)
++  const sectionRef   = useRef<HTMLElement>(null)
++  const sketch01Ref  = useRef<HTMLDivElement>(null)
++  const floorplanRef = useRef<HTMLDivElement>(null)
++  const annotateRef  = useRef<HTMLDivElement>(null)
++  const arrowRef     = useRef<HTMLDivElement>(null)
+ 
+   /* Scroll-linked connector line fill */
+   const { scrollYProgress } = useScroll({
+@@ -22,6 +30,24 @@ export function Process({ eyebrow, stages }: ProcessContent) {
+   })
+   const lineScaleY = useTransform(scrollYProgress, [0, 1], [0, 1])
+ 
++  const { scrollYProgress: sketch01Progress } = useScroll({
++    target: sketch01Ref,
++    offset: ['start end', 'end start'],
++  })
++  const sketch01Y = useTransform(sketch01Progress, [0, 1], ['-14px', '14px'])
++
++  const { scrollYProgress: floorplanProgress } = useScroll({
++    target: floorplanRef,
++    offset: ['start end', 'end start'],
++  })
++  const floorplanY = useTransform(floorplanProgress, [0, 1], ['-14px', '14px'])
++
++  const { scrollYProgress: annotateProgress } = useScroll({
++    target: annotateRef,
++    offset: ['start end', 'end start'],
++  })
++  const annotateY = useTransform(annotateProgress, [0, 1], ['-14px', '14px'])
++
+   return (
+     <section ref={sectionRef} className="bg-sand py-section-lg" aria-labelledby="process-heading">
+       <div className="max-w-container mx-auto px-[6vw]">
+@@ -73,14 +99,90 @@ export function Process({ eyebrow, stages }: ProcessContent) {
+                   {stage.number}
+                 </span>
+ 
+-                {/* Content */}
+-                <div className="pt-3">
+-                  <p className="font-serif text-headline-m text-espresso">{stage.title}</p>
+-                  <p className="mt-3 font-serif text-body-l text-espresso max-w-[52ch]">
+-                    {stage.description}
+-                  </p>
++                {/* Content + optional mark/photo */}
++                <div className="pt-3 flex-1 flex items-start gap-10">
++                  <div className="flex-1">
++                    <p className="font-serif text-headline-m text-espresso">{stage.title}</p>
++                    <p className="mt-3 font-serif text-body-l text-espresso max-w-[52ch]">
++                      {stage.description}
++                    </p>
++                  </div>
++
++                  {/* Stage 01: curved floor plan sketch */}
++                  {index === 0 && (
++                    <motion.div
++                      ref={sketch01Ref}
++                      className="hidden md:block flex-shrink-0 w-[180px] z-20 pointer-events-none"
++                      style={{ y: reduced ? '0px' : sketch01Y }}
++                      aria-hidden="true"
++                    >
++                      <Image
++                        src={MIXED_MEDIA.marks.floorplanCurved.src}
++                        alt=""
++                        width={MIXED_MEDIA.marks.floorplanCurved.width}
++                        height={MIXED_MEDIA.marks.floorplanCurved.height}
++                        className="w-full h-auto"
++                        style={{ filter: 'drop-shadow(0 4px 14px rgba(43,36,32,0.10))' }}
++                      />
++                    </motion.div>
++                  )}
++
++                  {/* Stage 02: floorplan-sketching documentary photo */}
++                  {index === 1 && (
++                    <motion.div
++                      ref={floorplanRef}
++                      className="hidden md:block flex-shrink-0 w-[180px] z-20 pointer-events-none"
++                      style={{ y: reduced ? '0px' : floorplanY }}
++                      aria-hidden="true"
++                    >
++                      <Image
++                        src={MIXED_MEDIA.process.floorplanSketching.src}
++                        alt=""
++                        width={MIXED_MEDIA.process.floorplanSketching.width}
++                        height={MIXED_MEDIA.process.floorplanSketching.height}
++                        className="w-full h-auto"
++                        style={{ filter: DOC_FILTER }}
++                      />
++                    </motion.div>
++                  )}
++
++                  {/* Stage 03: plan-annotating documentary photo */}
++                  {index === 2 && (
++                    <motion.div
++                      ref={annotateRef}
++                      className="hidden md:block flex-shrink-0 w-[180px] z-20 pointer-events-none"
++                      style={{ rotate: 1.5, y: reduced ? '0px' : annotateY }}
++                      aria-hidden="true"
++                    >
++                      <Image
++                        src={MIXED_MEDIA.process.planAnnotating.src}
++                        alt=""
++                        width={MIXED_MEDIA.process.planAnnotating.width}
++                        height={MIXED_MEDIA.process.planAnnotating.height}
++                        className="w-full h-auto"
++                        style={{ filter: DOC_FILTER }}
++                      />
++                    </motion.div>
++                  )}
+                 </div>
+               </div>
++
++              {/* Circle arrow — centered between stages 03 and 04 */}
++              {index === 2 && (
++                <div
++                  ref={arrowRef}
++                  className="hidden md:flex justify-center mt-8 pointer-events-none"
++                  aria-hidden="true"
++                >
++                  <Image
++                    src={MIXED_MEDIA.marks.circleArrow.src}
++                    alt=""
++                    width={MIXED_MEDIA.marks.circleArrow.width}
++                    height={MIXED_MEDIA.marks.circleArrow.height}
++                    style={{ width: 200, height: 'auto', opacity: 0.85 }}
++                  />
++                </div>
++              )}
+             </motion.div>
+           ))}
+         </div>
+diff --git a/components/sections/ServicesAccordion.tsx b/components/sections/ServicesAccordion.tsx
+index bc0ac30..646a380 100644
+--- a/components/sections/ServicesAccordion.tsx
++++ b/components/sections/ServicesAccordion.tsx
+@@ -1,8 +1,11 @@
+ 'use client'
+ 
+-import { motion, useReducedMotion } from 'framer-motion'
++import { useRef } from 'react'
++import Image from 'next/image'
++import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
+ import * as Accordion from '@radix-ui/react-accordion'
+ import type { ServicesContent } from '@/lib/content/home'
++import { MIXED_MEDIA } from '@/lib/assets/mixedMedia'
+ 
+ const EASE = [0.22, 0.61, 0.36, 1] as const
+ 
+@@ -24,10 +27,54 @@ const PANEL_LABELS = {
+ 
+ export function ServicesAccordion({ eyebrow, items }: ServicesContent) {
+   const reduced = useReducedMotion()
++  const sectionRef = useRef<HTMLElement>(null)
++  const { scrollYProgress } = useScroll({
++    target: sectionRef,
++    offset: ['start end', 'end start'],
++  })
++  const swatchesY = useTransform(scrollYProgress, [0, 1], ['-12px', '12px'])
+ 
+   return (
+-    <section className="bg-sand py-section-lg" aria-labelledby="services-heading">
+-      <div className="max-w-container mx-auto px-[6vw]">
++    <section ref={sectionRef} className="bg-sand py-section-lg relative overflow-hidden" aria-labelledby="services-heading">
++
++      {/* Section sketch — absolute top-left, desktop only, z-0 behind content */}
++      <div
++        className="absolute hidden md:block pointer-events-none z-0"
++        style={{ left: '4vw', top: '20%', width: '10%', opacity: 0.85 }}
++        aria-hidden="true"
++      >
++        <Image
++          src={MIXED_MEDIA.marks.sectionSketch.src}
++          alt=""
++          width={MIXED_MEDIA.marks.sectionSketch.width}
++          height={MIXED_MEDIA.marks.sectionSketch.height}
++          className="w-full h-auto"
++        />
++      </div>
++
++      {/* Swatches — absolute bottom-left, parallax 1.04x, rotation -2deg */}
++      <motion.div
++        className="absolute hidden md:block pointer-events-none z-0"
++        style={{
++          left: '6vw',
++          bottom: '8%',
++          width: '13%',
++          rotate: -2,
++          y: reduced ? '0px' : swatchesY,
++        }}
++        aria-hidden="true"
++      >
++        <Image
++          src={MIXED_MEDIA.process.swatchesArranging.src}
++          alt=""
++          width={MIXED_MEDIA.process.swatchesArranging.width}
++          height={MIXED_MEDIA.process.swatchesArranging.height}
++          className="w-full h-auto"
++          style={{ filter: 'sepia(0.18) brightness(1.02) saturate(0.95) drop-shadow(0 4px 16px rgba(43,36,32,0.14))' }}
++        />
++      </motion.div>
++
++      <div className="max-w-container mx-auto px-[6vw] relative z-10">
+ 
+         <motion.div
+           variants={revealContainer}

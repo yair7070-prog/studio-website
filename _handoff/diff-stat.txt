@@ -1,0 +1,5 @@
+ components/sections/About.tsx             |  90 +++++++++++++++++++++--
+ components/sections/FinalCTA.tsx          |  72 +++++++++++++++++--
+ components/sections/Process.tsx           | 116 ++++++++++++++++++++++++++++--
+ components/sections/ServicesAccordion.tsx |  53 +++++++++++++-
+ 4 files changed, 310 insertions(+), 21 deletions(-)

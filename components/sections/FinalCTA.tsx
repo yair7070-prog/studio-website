@@ -1,10 +1,12 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useRef, useState, useMemo } from 'react'
+import Image from 'next/image'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
+import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform } from 'framer-motion'
+import { MIXED_MEDIA } from '@/lib/assets/mixedMedia'
 
 const EASE = [0.22, 0.61, 0.36, 1] as const
 import type { FinalCTAContent } from '@/lib/content/home'
@@ -42,6 +44,14 @@ export function FinalCTA({
   const [submitted, setSubmitted] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const reduced = useReducedMotion()
+  const sectionRef = useRef<HTMLElement>(null)
+  const pensiveRef  = useRef<HTMLDivElement>(null)
+
+  const { scrollYProgress: pensiveProgress } = useScroll({
+    target: pensiveRef,
+    offset: ['start end', 'end start'],
+  })
+  const pensiveY = useTransform(pensiveProgress, [0, 1], ['16px', '-16px'])
 
   const schema = useMemo(() => createSchema(form.errors), [form.errors])
 
@@ -65,8 +75,42 @@ export function FinalCTA({
   }
 
   return (
-    <section id="lead-form" className="bg-sand py-section-xl" aria-labelledby="lead-form-title">
-      <div className="max-w-container mx-auto px-[6vw]">
+    <section ref={sectionRef} id="lead-form" className="bg-sand py-section-xl relative overflow-hidden" aria-labelledby="lead-form-title">
+
+      {/* Pensive portrait — absolute left, parallax 0.95x, desktop only */}
+      <motion.div
+        ref={pensiveRef}
+        className="absolute hidden md:block top-[8%] pointer-events-none z-0"
+        style={{ left: '6vw', width: '18%', y: reduced ? '0px' : pensiveY }}
+        aria-hidden="true"
+      >
+        <Image
+          src={MIXED_MEDIA.portraits.pensive.src}
+          alt=""
+          width={MIXED_MEDIA.portraits.pensive.width}
+          height={MIXED_MEDIA.portraits.pensive.height}
+          className="w-full h-auto"
+          style={{ filter: 'drop-shadow(0 8px 24px rgba(43,36,32,0.12))' }}
+        />
+      </motion.div>
+
+      {/* Handwritten caption — sits ~24px below portrait bottom edge, desktop only */}
+      {/* TODO: replace with proper "אני קוראת כל פנייה" handwritten asset when generated */}
+      <div
+        className="absolute hidden md:block pointer-events-none z-0"
+        style={{ left: '6vw', top: 'calc(8% + 27vw + 24px)', width: 140, opacity: 0.7 }}
+        aria-hidden="true"
+      >
+        <Image
+          src={MIXED_MEDIA.marks.bayitSignature.src}
+          alt=""
+          width={MIXED_MEDIA.marks.bayitSignature.width}
+          height={MIXED_MEDIA.marks.bayitSignature.height}
+          className="w-full h-auto"
+        />
+      </div>
+
+      <div className="max-w-container mx-auto px-[6vw] relative z-10">
 
         <motion.p
           className="text-small text-taupe tracking-[0.08em]"
@@ -78,6 +122,16 @@ export function FinalCTA({
           {eyebrow}
         </motion.p>
         <div className="mt-12" />
+        {/* Pencil stroke — decorative mark above headline */}
+        <div className="mb-4 pointer-events-none" aria-hidden="true">
+          <Image
+            src={MIXED_MEDIA.marks.pencilStroke.src}
+            alt=""
+            width={MIXED_MEDIA.marks.pencilStroke.width}
+            height={MIXED_MEDIA.marks.pencilStroke.height}
+            style={{ width: 280, height: 'auto', opacity: 0.85 }}
+          />
+        </div>
         <motion.h2
           id="lead-form-title"
           className="font-serif text-display-xl text-espresso"
@@ -210,6 +264,16 @@ export function FinalCTA({
                 )}
 
                 <div>
+                  {/* 48-hours oval — decorative mark above submit button */}
+                  <div className="mb-4 pointer-events-none" aria-hidden="true">
+                    <Image
+                      src={MIXED_MEDIA.marks.hoursOval.src}
+                      alt=""
+                      width={MIXED_MEDIA.marks.hoursOval.width}
+                      height={MIXED_MEDIA.marks.hoursOval.height}
+                      style={{ width: 220, height: 'auto' }}
+                    />
+                  </div>
                   <Button
                     type="submit"
                     loading={isSubmitting}

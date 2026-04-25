@@ -1,8 +1,11 @@
 'use client'
 
-import { motion, useReducedMotion } from 'framer-motion'
+import { useRef } from 'react'
+import Image from 'next/image'
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import * as Accordion from '@radix-ui/react-accordion'
 import type { ServicesContent } from '@/lib/content/home'
+import { MIXED_MEDIA } from '@/lib/assets/mixedMedia'
 
 const EASE = [0.22, 0.61, 0.36, 1] as const
 
@@ -24,10 +27,54 @@ const PANEL_LABELS = {
 
 export function ServicesAccordion({ eyebrow, items }: ServicesContent) {
   const reduced = useReducedMotion()
+  const sectionRef = useRef<HTMLElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  })
+  const swatchesY = useTransform(scrollYProgress, [0, 1], ['-12px', '12px'])
 
   return (
-    <section className="bg-sand py-section-lg" aria-labelledby="services-heading">
-      <div className="max-w-container mx-auto px-[6vw]">
+    <section ref={sectionRef} className="bg-sand py-section-lg relative overflow-hidden" aria-labelledby="services-heading">
+
+      {/* Section sketch — absolute top-left, desktop only, z-0 behind content */}
+      <div
+        className="absolute hidden md:block pointer-events-none z-0"
+        style={{ left: '4vw', top: '20%', width: '10%', opacity: 0.85 }}
+        aria-hidden="true"
+      >
+        <Image
+          src={MIXED_MEDIA.marks.sectionSketch.src}
+          alt=""
+          width={MIXED_MEDIA.marks.sectionSketch.width}
+          height={MIXED_MEDIA.marks.sectionSketch.height}
+          className="w-full h-auto"
+        />
+      </div>
+
+      {/* Swatches — absolute bottom-left, parallax 1.04x, rotation -2deg */}
+      <motion.div
+        className="absolute hidden md:block pointer-events-none z-0"
+        style={{
+          left: '6vw',
+          bottom: '8%',
+          width: '13%',
+          rotate: -2,
+          y: reduced ? '0px' : swatchesY,
+        }}
+        aria-hidden="true"
+      >
+        <Image
+          src={MIXED_MEDIA.process.swatchesArranging.src}
+          alt=""
+          width={MIXED_MEDIA.process.swatchesArranging.width}
+          height={MIXED_MEDIA.process.swatchesArranging.height}
+          className="w-full h-auto"
+          style={{ filter: 'sepia(0.18) brightness(1.02) saturate(0.95) drop-shadow(0 4px 16px rgba(43,36,32,0.14))' }}
+        />
+      </motion.div>
+
+      <div className="max-w-container mx-auto px-[6vw] relative z-10">
 
         <motion.div
           variants={revealContainer}

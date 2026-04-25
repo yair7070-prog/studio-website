@@ -1,8 +1,10 @@
 'use client'
 
 import { useRef } from 'react'
+import Image from 'next/image'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import type { ProcessContent } from '@/lib/content/home'
+import { MIXED_MEDIA } from '@/lib/assets/mixedMedia'
 
 const EASE = [0.22, 0.61, 0.36, 1] as const
 
@@ -11,9 +13,15 @@ const VARIANTS = {
   visible: { opacity: 1, y: 0 },
 }
 
+const DOC_FILTER = 'sepia(0.18) brightness(1.02) saturate(0.95) drop-shadow(0 4px 14px rgba(43,36,32,0.12))'
+
 export function Process({ eyebrow, stages }: ProcessContent) {
   const reduced = useReducedMotion()
-  const sectionRef = useRef<HTMLElement>(null)
+  const sectionRef   = useRef<HTMLElement>(null)
+  const sketch01Ref  = useRef<HTMLDivElement>(null)
+  const floorplanRef = useRef<HTMLDivElement>(null)
+  const annotateRef  = useRef<HTMLDivElement>(null)
+  const arrowRef     = useRef<HTMLDivElement>(null)
 
   /* Scroll-linked connector line fill */
   const { scrollYProgress } = useScroll({
@@ -21,6 +29,24 @@ export function Process({ eyebrow, stages }: ProcessContent) {
     offset: ['start 0.75', 'end 0.25'],
   })
   const lineScaleY = useTransform(scrollYProgress, [0, 1], [0, 1])
+
+  const { scrollYProgress: sketch01Progress } = useScroll({
+    target: sketch01Ref,
+    offset: ['start end', 'end start'],
+  })
+  const sketch01Y = useTransform(sketch01Progress, [0, 1], ['-14px', '14px'])
+
+  const { scrollYProgress: floorplanProgress } = useScroll({
+    target: floorplanRef,
+    offset: ['start end', 'end start'],
+  })
+  const floorplanY = useTransform(floorplanProgress, [0, 1], ['-14px', '14px'])
+
+  const { scrollYProgress: annotateProgress } = useScroll({
+    target: annotateRef,
+    offset: ['start end', 'end start'],
+  })
+  const annotateY = useTransform(annotateProgress, [0, 1], ['-14px', '14px'])
 
   return (
     <section ref={sectionRef} className="bg-sand py-section-lg" aria-labelledby="process-heading">
@@ -73,14 +99,90 @@ export function Process({ eyebrow, stages }: ProcessContent) {
                   {stage.number}
                 </span>
 
-                {/* Content */}
-                <div className="pt-3">
-                  <p className="font-serif text-headline-m text-espresso">{stage.title}</p>
-                  <p className="mt-3 font-serif text-body-l text-espresso max-w-[52ch]">
-                    {stage.description}
-                  </p>
+                {/* Content + optional mark/photo */}
+                <div className="pt-3 flex-1 flex items-start gap-10">
+                  <div className="flex-1">
+                    <p className="font-serif text-headline-m text-espresso">{stage.title}</p>
+                    <p className="mt-3 font-serif text-body-l text-espresso max-w-[52ch]">
+                      {stage.description}
+                    </p>
+                  </div>
+
+                  {/* Stage 01: curved floor plan sketch */}
+                  {index === 0 && (
+                    <motion.div
+                      ref={sketch01Ref}
+                      className="hidden md:block flex-shrink-0 w-[180px] z-20 pointer-events-none"
+                      style={{ y: reduced ? '0px' : sketch01Y }}
+                      aria-hidden="true"
+                    >
+                      <Image
+                        src={MIXED_MEDIA.marks.floorplanCurved.src}
+                        alt=""
+                        width={MIXED_MEDIA.marks.floorplanCurved.width}
+                        height={MIXED_MEDIA.marks.floorplanCurved.height}
+                        className="w-full h-auto"
+                        style={{ filter: 'drop-shadow(0 4px 14px rgba(43,36,32,0.10))' }}
+                      />
+                    </motion.div>
+                  )}
+
+                  {/* Stage 02: floorplan-sketching documentary photo */}
+                  {index === 1 && (
+                    <motion.div
+                      ref={floorplanRef}
+                      className="hidden md:block flex-shrink-0 w-[180px] z-20 pointer-events-none"
+                      style={{ y: reduced ? '0px' : floorplanY }}
+                      aria-hidden="true"
+                    >
+                      <Image
+                        src={MIXED_MEDIA.process.floorplanSketching.src}
+                        alt=""
+                        width={MIXED_MEDIA.process.floorplanSketching.width}
+                        height={MIXED_MEDIA.process.floorplanSketching.height}
+                        className="w-full h-auto"
+                        style={{ filter: DOC_FILTER }}
+                      />
+                    </motion.div>
+                  )}
+
+                  {/* Stage 03: plan-annotating documentary photo */}
+                  {index === 2 && (
+                    <motion.div
+                      ref={annotateRef}
+                      className="hidden md:block flex-shrink-0 w-[180px] z-20 pointer-events-none"
+                      style={{ rotate: 1.5, y: reduced ? '0px' : annotateY }}
+                      aria-hidden="true"
+                    >
+                      <Image
+                        src={MIXED_MEDIA.process.planAnnotating.src}
+                        alt=""
+                        width={MIXED_MEDIA.process.planAnnotating.width}
+                        height={MIXED_MEDIA.process.planAnnotating.height}
+                        className="w-full h-auto"
+                        style={{ filter: DOC_FILTER }}
+                      />
+                    </motion.div>
+                  )}
                 </div>
               </div>
+
+              {/* Circle arrow — centered between stages 03 and 04 */}
+              {index === 2 && (
+                <div
+                  ref={arrowRef}
+                  className="hidden md:flex justify-center mt-8 pointer-events-none"
+                  aria-hidden="true"
+                >
+                  <Image
+                    src={MIXED_MEDIA.marks.circleArrow.src}
+                    alt=""
+                    width={MIXED_MEDIA.marks.circleArrow.width}
+                    height={MIXED_MEDIA.marks.circleArrow.height}
+                    style={{ width: 200, height: 'auto', opacity: 0.85 }}
+                  />
+                </div>
+              )}
             </motion.div>
           ))}
         </div>
