@@ -9,6 +9,7 @@ export const MIXED_MEDIA = {
     travertineSlab:   { src: '/assets/marks/travertine-slab.png',      width: 1161, height: 1355 },
     bowlPolaroid:     { src: '/assets/marks/bowl-polaroid.png',         width: 1162, height: 1354 },
     bayitSignature:   { src: '/assets/marks/bayit-signature.png',       width: 1774, height: 887  },
+    aniqoretCaption:  { src: '/assets/marks/aniqoret-caption.png',      width: 1672, height: 941  },
     sectionSketch:    { src: '/assets/marks/section-sketch-2-70.png',   width: 1086, height: 1448 },
     circleArrow:      { src: '/assets/marks/circle-arrow.png',          width: 2508, height: 627  },
     hoursOval:        { src: '/assets/marks/48-hours-oval.png',         width: 1448, height: 1086 },

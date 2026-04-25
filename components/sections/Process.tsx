@@ -17,11 +17,12 @@ const DOC_FILTER = 'sepia(0.18) brightness(1.02) saturate(0.95) drop-shadow(0 4p
 
 export function Process({ eyebrow, stages }: ProcessContent) {
   const reduced = useReducedMotion()
-  const sectionRef   = useRef<HTMLElement>(null)
-  const sketch01Ref  = useRef<HTMLDivElement>(null)
-  const floorplanRef = useRef<HTMLDivElement>(null)
-  const annotateRef  = useRef<HTMLDivElement>(null)
-  const arrowRef     = useRef<HTMLDivElement>(null)
+  const sectionRef    = useRef<HTMLElement>(null)
+  const sketch01Ref   = useRef<HTMLDivElement>(null)
+  const floorplanRef  = useRef<HTMLDivElement>(null)
+  const annotateRef   = useRef<HTMLDivElement>(null)
+  const sketchbookRef = useRef<HTMLDivElement>(null)
+  const arrowRef      = useRef<HTMLDivElement>(null)
 
   /* Scroll-linked connector line fill */
   const { scrollYProgress } = useScroll({
@@ -47,6 +48,12 @@ export function Process({ eyebrow, stages }: ProcessContent) {
     offset: ['start end', 'end start'],
   })
   const annotateY = useTransform(annotateProgress, [0, 1], ['-14px', '14px'])
+
+  const { scrollYProgress: sketchbookProgress } = useScroll({
+    target: sketchbookRef,
+    offset: ['start end', 'end start'],
+  })
+  const sketchbookY = useTransform(sketchbookProgress, [0, 1], ['-14px', '14px'])
 
   return (
     <section ref={sectionRef} className="bg-sand py-section-lg" aria-labelledby="process-heading">
@@ -132,7 +139,7 @@ export function Process({ eyebrow, stages }: ProcessContent) {
                     <motion.div
                       ref={floorplanRef}
                       className="hidden md:block flex-shrink-0 w-[180px] z-20 pointer-events-none"
-                      style={{ y: reduced ? '0px' : floorplanY }}
+                      style={{ rotate: -1.2, y: reduced ? '0px' : floorplanY }}
                       aria-hidden="true"
                     >
                       <Image
@@ -159,6 +166,25 @@ export function Process({ eyebrow, stages }: ProcessContent) {
                         alt=""
                         width={MIXED_MEDIA.process.planAnnotating.width}
                         height={MIXED_MEDIA.process.planAnnotating.height}
+                        className="w-full h-auto"
+                        style={{ filter: DOC_FILTER }}
+                      />
+                    </motion.div>
+                  )}
+
+                  {/* Stage 04: sketchbook-closing documentary photo */}
+                  {index === 3 && (
+                    <motion.div
+                      ref={sketchbookRef}
+                      className="hidden md:block flex-shrink-0 w-[180px] z-20 pointer-events-none"
+                      style={{ rotate: -1, y: reduced ? '0px' : sketchbookY }}
+                      aria-hidden="true"
+                    >
+                      <Image
+                        src={MIXED_MEDIA.process.sketchbookClosing.src}
+                        alt=""
+                        width={MIXED_MEDIA.process.sketchbookClosing.width}
+                        height={MIXED_MEDIA.process.sketchbookClosing.height}
                         className="w-full h-auto"
                         style={{ filter: DOC_FILTER }}
                       />

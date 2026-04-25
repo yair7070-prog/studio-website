@@ -70,7 +70,7 @@ export function ServicesAccordion({ eyebrow, items }: ServicesContent) {
           width={MIXED_MEDIA.process.swatchesArranging.width}
           height={MIXED_MEDIA.process.swatchesArranging.height}
           className="w-full h-auto"
-          style={{ filter: 'sepia(0.18) brightness(1.02) saturate(0.95) drop-shadow(0 4px 16px rgba(43,36,32,0.14))' }}
+          style={{ filter: 'sepia(0.18) brightness(1.02) saturate(0.95) drop-shadow(0 10px 28px rgba(43,36,32,0.17))' }}
         />
       </motion.div>
 

@@ -178,7 +178,7 @@ export function About({ paragraph, portraitAlt, signature, tagline }: AboutConte
                 width={MIXED_MEDIA.marks.travertineSlab.width}
                 height={MIXED_MEDIA.marks.travertineSlab.height}
                 className="w-full h-auto"
-                style={{ opacity: 0.85 }}
+                style={{ opacity: 0.7 }}
               />
             </motion.div>
 
@@ -224,7 +224,7 @@ export function About({ paragraph, portraitAlt, signature, tagline }: AboutConte
                 width={MIXED_MEDIA.marks.bowlPolaroid.width}
                 height={MIXED_MEDIA.marks.bowlPolaroid.height}
                 className="w-full h-auto"
-                style={{ filter: 'drop-shadow(0 4px 12px rgba(43,36,32,0.12))' }}
+                style={{ filter: 'drop-shadow(0 10px 28px rgba(43,36,32,0.17))' }}
               />
             </motion.div>
           </motion.div>

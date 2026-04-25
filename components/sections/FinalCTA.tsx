@@ -95,17 +95,16 @@ export function FinalCTA({
       </motion.div>
 
       {/* Handwritten caption — sits ~24px below portrait bottom edge, desktop only */}
-      {/* TODO: replace with proper "אני קוראת כל פנייה" handwritten asset when generated */}
       <div
         className="absolute hidden md:block pointer-events-none z-0"
-        style={{ left: '6vw', top: 'calc(8% + 27vw + 24px)', width: 140, opacity: 0.7 }}
+        style={{ left: '6vw', top: 'calc(8% + 27vw + 24px)', width: 200, opacity: 0.7 }}
         aria-hidden="true"
       >
         <Image
-          src={MIXED_MEDIA.marks.bayitSignature.src}
+          src={MIXED_MEDIA.marks.aniqoretCaption.src}
           alt=""
-          width={MIXED_MEDIA.marks.bayitSignature.width}
-          height={MIXED_MEDIA.marks.bayitSignature.height}
+          width={MIXED_MEDIA.marks.aniqoretCaption.width}
+          height={MIXED_MEDIA.marks.aniqoretCaption.height}
           className="w-full h-auto"
         />
       </div>
@@ -271,7 +270,7 @@ export function FinalCTA({
                       alt=""
                       width={MIXED_MEDIA.marks.hoursOval.width}
                       height={MIXED_MEDIA.marks.hoursOval.height}
-                      style={{ width: 220, height: 'auto' }}
+                      style={{ width: 220, height: 'auto', opacity: 0.85 }}
                     />
                   </div>
                   <Button

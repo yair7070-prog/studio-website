@@ -4,6 +4,19 @@ import { Fragment, useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import type { PositioningStripContent } from '@/lib/content/home'
 
+/**
+ * PositioningStrip — INTENTIONALLY ASSET-FREE.
+ *
+ * Per design audit 2026-04, this section's power is its typographic
+ * authority. Three pillars on a bone bed, no portraits, no marks, no
+ * photographs. A prior iteration added a ghosted environmental portrait
+ * here; it competed with pillar typography and was reverted.
+ *
+ * Do not add visual assets to this section in future iterations.
+ * If you feel tempted: this section was deliberately solved by removing
+ * an asset, not by adding one.
+ */
+
 const EASE = [0.22, 0.61, 0.36, 1] as const
 
 // Container just triggers propagation — no staggerChildren, so dividers don't
