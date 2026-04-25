@@ -45,7 +45,11 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
     const selectedOpt  = realOptions.find(o => o.value === selectedValue)
     const isEmpty      = !selectedValue
 
-    /* Commit a selection: sync hidden native select → react-hook-form picks up the native change event */
+    /* Commit a selection: sync hidden native select AND notify RHF directly.
+       Dispatching a native change event is unreliable for programmatic value
+       updates (React may not synthesise onChange if it doesn't detect a user
+       gesture). We mirror the working mobile path by calling onChange?.(e)
+       with the updated element as the event target. */
     const commit = useCallback((value: string) => {
       setSelected(value)
       setIsOpen(false)
@@ -54,9 +58,10 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
 
       if (hiddenRef.current) {
         hiddenRef.current.value = value
-        hiddenRef.current.dispatchEvent(new Event('change', { bubbles: true }))
+        // Direct RHF notification — same pattern as the mobile <select> path
+        onChange?.({ target: hiddenRef.current } as React.ChangeEvent<HTMLSelectElement>)
       }
-    }, [])
+    }, [onChange])
 
     /* Close on outside pointer-down */
     useEffect(() => {

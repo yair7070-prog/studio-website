@@ -8,9 +8,25 @@ const EASE = [0.22, 0.61, 0.36, 1] as const
 const DURATION_MS = 12_000
 
 export function Testimonials({ eyebrow, items }: TestimonialsContent) {
+  // Strict mounted flag — same pattern as HeroScrollSequence, About, IntroLoader.
+  // useReducedMotion() returns null on the server (Framer Motion v11). Any JSX
+  // that branches on `reduced === false` (not just `!reduced`) produces a
+  // structural DOM mismatch on every page load. The mounted flag prevents any
+  // reduced-dependent conditional rendering until after hydration is complete.
+  const [mounted, setMounted] = useState(false)
+
+  // All hooks unconditionally at top level (React rules of hooks).
   const reduced = useReducedMotion()
   const [index,  setIndex]  = useState(0)
   const [paused, setPaused] = useState(false)
+
+  const quoteRef      = useRef<HTMLSpanElement>(null)
+  const quoteControls = useAnimation()
+  const isInView      = useInView(quoteRef, { once: true, margin: '-10%' })
+  const didEnter      = useRef(false)
+  const isFirstIndex  = useRef(true)
+
+  useEffect(() => { setMounted(true) }, [])
 
   const multi = items.length > 1
   const item  = items[index]
@@ -21,36 +37,32 @@ export function Testimonials({ eyebrow, items }: TestimonialsContent) {
 
   /* Auto-advance for reduced-motion (no CSS animation → no onAnimationEnd) */
   useEffect(() => {
-    if (!multi || !reduced || paused) return
+    if (!mounted || !multi || !reduced || paused) return
     const id = setInterval(advance, DURATION_MS)
     return () => clearInterval(id)
-  }, [multi, reduced, paused, advance])
+  }, [mounted, multi, reduced, paused, advance])
 
   /* ── Quote mark entrance + pulse ────────────────────────────────────────
      useAnimation + useInView so we can fire a scale keyframe on index
      change without fighting whileInView's priority over animate.
   */
-  const quoteRef      = useRef<HTMLSpanElement>(null)
-  const quoteControls = useAnimation()
-  const isInView      = useInView(quoteRef, { once: true, margin: '-10%' })
-  const didEnter      = useRef(false)
-  const isFirstIndex  = useRef(true)
 
   // One-time entrance animation
   useEffect(() => {
-    if (!isInView || didEnter.current) return
+    if (!mounted || !isInView || didEnter.current) return
     didEnter.current = true
     if (!reduced) {
       quoteControls.start({ opacity: 1, y: 0, transition: { duration: 0.7, ease: EASE } })
     }
-  }, [isInView, reduced, quoteControls])
+  }, [mounted, isInView, reduced, quoteControls])
 
   // Pulse on each subsequent index change
   useEffect(() => {
+    if (!mounted) return
     if (isFirstIndex.current) { isFirstIndex.current = false; return }
     if (reduced) return
     quoteControls.start({ scale: [1, 1.06, 1], transition: { duration: 0.5, ease: EASE } })
-  }, [index, reduced, quoteControls])
+  }, [mounted, index, reduced, quoteControls])
 
   return (
     <section className="bg-bone py-section-lg" aria-labelledby="testimonials-heading">
@@ -149,7 +161,8 @@ export function Testimonials({ eyebrow, items }: TestimonialsContent) {
               </div>
 
               {/* Scroll-progress hairline — fills over DURATION_MS */}
-              {reduced === false && (
+              {/* mounted guard prevents the `null === false` server/client structural mismatch */}
+              {mounted && reduced === false && (
                 <div className="mt-6 h-px bg-stone/40 relative overflow-hidden">
                   <div
                     key={`prog-${index}`}
