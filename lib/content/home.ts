@@ -282,7 +282,7 @@ export const projects: ProjectsContent = {
       id: 'apartment-tel-aviv',
       name: 'דירה בצפון תל אביב',
       metadata: 'תל אביב, 2025',
-      label: { text: 'הדמיה', variant: 'rendering' },
+      label: { text: 'בתכנון', variant: 'in-progress' },
       coverAlt: 'הדמיה של סלון בדירה בתל אביב',
       description:
         'דירת קבלן בת ארבעה חדרים בפרויקט חדש. עבודה על שינויי קבלן מוקדמים, תכנון המטבח והחללים הציבוריים, ובחירת חומרים וטקסטיל.',
