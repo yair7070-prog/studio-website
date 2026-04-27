@@ -35,8 +35,7 @@ export const MIXED_MEDIA = {
       hero: { src: '/assets/projects/proj-02-sharon-hero.png', width: 1122, height: 1402, alt: 'הדמיה של בית פרטי בשרון' },
       overlays: {
         annotation: { src: '/assets/projects/overlay-p2-annotation.png', width: 1916, height: 821, alt: 'הערה בכתב יד' },
-        elevation:  { src: '/assets/projects/overlay-p2-elevation.png',  width: 1774, height: 887, alt: 'חזית אדריכלית' },
-        swatches:   { src: '/assets/projects/overlay-p2-swatches.png',   width: 1915, height: 821, alt: 'דוגמיות חומרים' },
+        swatches:   { src: '/assets/projects/overlay-p2-swatches.png',   width: 1774, height: 887, alt: 'דוגמיות חומרים' },
       },
     },
     'apartment-herzliya': {

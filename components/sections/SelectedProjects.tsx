@@ -36,9 +36,8 @@ const OVERLAY_LAYOUT: Record<string, Record<string, OverlayPosition>> = {
     swatches:      { width: '24%', rotate: 3,    bottom: '12%', left: '2%' },
   },
   'house-hasharon': {
-    elevation:     { width: '28%', rotate: -1.5, top: '8%',     left: '2%' },
-    annotation:    { width: '20%', rotate: 1,    top: '50%',    right: '2%' },
-    swatches:      { width: '24%', rotate: -2,   bottom: '12%', left: '2%' },
+    annotation: { width: '20%', rotate: 1,    top: '50%', right: '2%' },
+    swatches:   { width: '28%', rotate: -1.5, top: '8%',  left: '2%' },
   },
   'apartment-herzliya': {
     beforeInset:   { width: '26%', rotate: -3,   top: '8%',     left: '2%' },
@@ -56,9 +55,20 @@ const OVERLAY_LAYOUT: Record<string, Record<string, OverlayPosition>> = {
 // Separate map (not a key in OVERLAY_LAYOUT) so the layout type stays clean.
 const CAPTION_VISUAL_BY_PROJECT: Record<string, string> = {
   'apartment-tel-aviv':  'floorplanCard',
-  'house-hasharon':      'elevation',
+  'house-hasharon':      'swatches',
   'apartment-herzliya':  'beforeInset',
   'apartment-raanana':   'beforeInset',
+}
+
+// Modal overlay allocation (Wave I). Each modal renders a curated subset of
+// the project's archived overlays as a magazine-style grid. Order matters —
+// first key renders first. Excluded: card's caption visual (already shown
+// above as hero context), ambiguous standalone elements (S-curve arrow).
+const MODAL_OVERLAYS_BY_PROJECT: Record<string, string[]> = {
+  'apartment-tel-aviv':  ['annotation', 'swatches'],
+  'house-hasharon':      ['annotation'],
+  'apartment-herzliya':  ['annotation', 'floorplanCard'],
+  'apartment-raanana':   ['annotation', 'swatches', 'ceilingFan'],
 }
 
 // ─── Focus trap hook ──────────────────────────────────────
@@ -111,10 +121,14 @@ function Lightbox({ project, onClose }: { project: ProjectItem; onClose: () => v
     return () => { document.body.style.overflow = prev }
   }, [])
 
+  const projectAssets    = (MIXED_MEDIA.projects as Record<string, ProjectAssetSet | undefined>)[project.id]
+  const modalOverlayKeys = MODAL_OVERLAYS_BY_PROJECT[project.id] ?? []
+  const projectLayout    = OVERLAY_LAYOUT[project.id]
+
   return (
-    /* Backdrop — fades in/out */
+    /* Backdrop — dimmed espresso overlay; click-to-dismiss. */
     <motion.div
-      className="fixed inset-0 z-50 bg-espresso/90 flex items-start justify-center p-6 overflow-y-auto"
+      className="fixed inset-0 z-50 bg-espresso/90 flex items-center justify-center p-6"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -122,46 +136,101 @@ function Lightbox({ project, onClose }: { project: ProjectItem; onClose: () => v
       onClick={onClose}
       role="presentation"
     >
-      {/* Dialog — scale + fade in from below */}
+      {/* Dialog — bone-paper notebook page; scrolls internally if content
+          exceeds 90vh. Motion: scale + fade-up; ease-paper, conformant. */}
       <motion.div
         ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className="relative w-full max-w-3xl my-auto py-8"
+        className="relative w-full max-w-3xl bg-bone p-8 md:p-12 max-h-[90vh] overflow-y-auto"
         initial={{ opacity: 0, scale: reduced ? 1 : 0.96, y: reduced ? 0 : 16 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: reduced ? 1 : 0.96, y: reduced ? 0 : 8 }}
         transition={{ duration: reduced ? 0 : 0.35, ease: EASE }}
         onClick={e => e.stopPropagation()}
       >
-        <h2 id={titleId} className="sr-only">{project.name}</h2>
+        {/* Close button — absolute top + reading-start (visually top-right in RTL). */}
+        <button
+          onClick={onClose}
+          className="absolute top-6 start-6 text-small font-serif text-walnut border border-walnut px-3 py-1 transition-colors duration-[250ms] ease-paper hover:bg-walnut hover:text-bone focus:outline-none focus-visible:ring-2 focus-visible:ring-walnut focus-visible:ring-offset-2 focus-visible:ring-offset-bone cursor-pointer"
+        >
+          סגור
+        </button>
 
-        {/* Close — top-end */}
-        <div className="flex justify-end mb-6">
-          <button
-            onClick={onClose}
-            className="text-small text-bone hover:text-walnut transition-colors duration-300 ease-paper focus:outline-none focus-visible:ring-2 focus-visible:ring-walnut focus-visible:ring-offset-2 focus-visible:ring-offset-espresso cursor-pointer"
-          >
-            סגור
-          </button>
+        {/* Project name — h2 doubles as the visible heading + aria-labelledby target. */}
+        <h2
+          id={titleId}
+          className="mt-12 font-serif text-display-l text-espresso text-start"
+        >
+          {project.name}
+        </h2>
+
+        {/* Hero photograph — full modal width, 4:5 aspect, no hover affordance
+            (modal is the destination, not a click target). */}
+        <div className="mt-8 aspect-[4/5] bg-mushroom relative overflow-hidden">
+          {projectAssets && (
+            <Image
+              src={projectAssets.hero.src}
+              alt={projectAssets.hero.alt}
+              fill
+              sizes="(max-width: 768px) 100vw, 672px"
+              className="object-cover"
+            />
+          )}
         </div>
 
-        {/* Images 2×2 (placeholder) */}
-        <div className="grid grid-cols-2 gap-3">
-          {[0, 1, 2, 3].map(i => (
-            <div key={i} className="aspect-[4/5] bg-stone/20 relative overflow-hidden">
-              <span className="absolute top-3 start-3 text-small text-stone/60 select-none">
-                תמונה תתווסף
-              </span>
-            </div>
-          ))}
-        </div>
-
-        {/* Description */}
-        <p className="mt-8 font-serif text-body-l text-bone/80 max-w-[52ch]">
+        {/* Description — Hebrew body serif, taupe on bone. */}
+        <p className="mt-6 font-serif text-body-l text-taupe max-w-[60ch]">
           {project.description}
         </p>
+
+        {/* Editorial overlay grid — each cell is a bone-paper isolation panel.
+            Line drawings (annotation, floorplanCard, ceilingFan) get their
+            own breathing-room cell; photography (swatches) renders the same
+            way for visual consistency. Rotation per OVERLAY_LAYOUT. */}
+        {projectAssets && modalOverlayKeys.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-8">
+            {modalOverlayKeys.map((key) => {
+              const asset = projectAssets.overlays[key]
+              if (!asset) return null
+              const rotation = projectLayout?.[key]?.rotate ?? 0
+              return (
+                <div key={key} className="bg-bone p-6 flex items-center justify-center">
+                  <div
+                    style={{
+                      transform: `rotate(${rotation}deg)`,
+                      filter: OVERLAY_SHADOW,
+                    }}
+                  >
+                    <Image
+                      src={asset.src}
+                      alt={asset.alt}
+                      width={asset.width}
+                      height={asset.height}
+                      className="max-w-full h-auto"
+                    />
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        )}
+
+        {/* Project metadata — location, year. */}
+        <p className="mt-6 text-small text-taupe">{project.metadata}</p>
+
+        {/* Editorial date pair — tiles 3 and 4 only. Same Wave H typography. */}
+        {project.id === 'apartment-herzliya' && (
+          <p className="mt-3 text-start font-serif text-body-m text-walnut tracking-[0.06em]">
+            לפני · 2025 — לקראת סיום · 2026
+          </p>
+        )}
+        {project.id === 'apartment-raanana' && (
+          <p className="mt-3 text-start font-serif text-body-m text-walnut tracking-[0.06em]">
+            לפני · 2024 — הושלם · 2025
+          </p>
+        )}
       </motion.div>
     </motion.div>
   )
@@ -303,7 +372,7 @@ export function SelectedProjects({ eyebrow, items }: ProjectsContent) {
                               )}
                             </div>
 
-                            {/* Caption text — project name, metadata, conditional Line 2. */}
+                            {/* Caption text — project name + plain location/year metadata. */}
                             <div>
                               <p
                                 className={[
@@ -314,18 +383,21 @@ export function SelectedProjects({ eyebrow, items }: ProjectsContent) {
                                 {item.name}
                               </p>
                               <p className="mt-2 text-small text-taupe">{item.metadata}</p>
-                              {item.id === 'apartment-herzliya' && (
-                                <p className="mt-3 font-serif text-body-m text-walnut tracking-[0.06em]">
-                                  לפני · 2025 — לקראת סיום · 2026
-                                </p>
-                              )}
-                              {item.id === 'apartment-raanana' && (
-                                <p className="mt-3 font-serif text-body-m text-walnut tracking-[0.06em]">
-                                  לפני · 2024 — הושלם · 2024
-                                </p>
-                              )}
                             </div>
                           </div>
+
+                          {/* Editorial date pair — sibling of the grid (full-width row).
+                              Anchored to the reading-start edge in RTL via text-start. */}
+                          {item.id === 'apartment-herzliya' && (
+                            <p className="mt-4 md:mt-6 text-start font-serif text-body-m text-walnut tracking-[0.06em]">
+                              לפני · 2025 — לקראת סיום · 2026
+                            </p>
+                          )}
+                          {item.id === 'apartment-raanana' && (
+                            <p className="mt-4 md:mt-6 text-start font-serif text-body-m text-walnut tracking-[0.06em]">
+                              לפני · 2024 — הושלם · 2025
+                            </p>
+                          )}
                         </div>
                       </>
                     )
