@@ -1,7 +1,7 @@
 import { Hero }              from '@/components/sections/Hero'
 import { PositioningStrip }  from '@/components/sections/PositioningStrip'
 import { About }             from '@/components/sections/About'
-import { ServicesAccordion } from '@/components/sections/ServicesAccordion'
+import { Services }          from '@/components/sections/Services'
 import { SelectedProjects }  from '@/components/sections/SelectedProjects'
 import { Process }           from '@/components/sections/Process'
 import { Testimonials }      from '@/components/sections/Testimonials'
@@ -11,7 +11,7 @@ import {
   hero,
   positioningStrip,
   about,
-  services,
+  serviceCategories,
   projects,
   process,
   testimonials,
@@ -25,7 +25,7 @@ export default function HomePage() {
       <Hero              {...hero} />
       <About             {...about} />
       <PositioningStrip  {...positioningStrip} />
-      <ServicesAccordion eyebrow={services.eyebrow} items={services.items} />
+      <Services          categories={serviceCategories} />
       <SelectedProjects  {...projects} />
       <Process           {...process} />
       <Testimonials      {...testimonials} />

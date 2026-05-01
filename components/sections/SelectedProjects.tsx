@@ -294,10 +294,14 @@ export function SelectedProjects({ eyebrow, items }: ProjectsContent) {
                   aria-haspopup="dialog"
                   className="group w-full text-start focus:outline-none focus-visible:ring-2 focus-visible:ring-walnut focus-visible:ring-offset-4 cursor-pointer"
                 >
-                  {/* Label */}
-                  <p className="text-small text-taupe tracking-[0.08em] mb-3">
-                    {item.label.text}
-                  </p>
+                  {/* Label — optional. Tile 4 (Ra'anana) intentionally omits
+                      per Adi's direction: completed projects show year only,
+                      no status indicator. */}
+                  {item.label && (
+                    <p className="text-small text-taupe tracking-[0.08em] mb-3">
+                      {item.label.text}
+                    </p>
+                  )}
 
                   {/* Photograph (Wave G — caption-sheet architecture).
                       Photo occupies full column width; no bleed margin, no
