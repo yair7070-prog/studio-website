@@ -21,7 +21,6 @@ export interface ServiceItem {
   title: string
   teaser: string
   included: string
-  timeline: string
   start: string
 }
 
@@ -86,7 +85,6 @@ export const services: ServicesContent = {
       teaser: 'ליווי מלא מהתוכניות ועד המפתח',
       included:
         'תכנון חללים, שינויי קבלן, בחירת חומרים, תאורה, מטבח, אמבטיות, ריהוט, טקסטיל וליווי ביצוע.',
-      timeline: 'בין שמונה לחמישה־עשר חודשים, בהתאם להיקף ולוחות הקבלן.',
       start: 'שיחת היכרות ללא עלות, סיור בדירה או בתוכניות, והצעה מפורטת.',
     },
     {
@@ -95,7 +93,6 @@ export const services: ServicesContent = {
       teaser: 'תכנון מחדש של בית קיים',
       included:
         'אבחון המצב הקיים, הצעת תכנון חדש, תיאום בעלי מקצוע, בחירת חומרים וליווי עד סיום.',
-      timeline: 'בין ששה לשנים־עשר חודשים, בהתאם להיקף השיפוץ.',
       start: 'פגישה בבית, מיפוי הצרכים, והצעת דרך עבודה מותאמת.',
     },
     {
@@ -104,7 +101,6 @@ export const services: ServicesContent = {
       teaser: 'עבור פרויקטים ממוקדים או שלבים נבחרים',
       included:
         'ייעוץ נקודתי לחדר מסוים, תכנון מטבח בלבד, בחירת ריהוט וטקסטיל לבית קיים, או ליווי לשלב ספציפי בתהליך.',
-      timeline: 'בין חודש לשלושה חודשים, בהתאם להיקף.',
       start: 'שיחה קצרה להבנת הצורך והגדרת תכולה ברורה.',
     },
     {
@@ -113,7 +109,6 @@ export const services: ServicesContent = {
       teaser: 'פגישה אחת, החלטות ברורות',
       included:
         'פגישה בבית או בתוכניות, לרוב עד שעתיים, עם המלצות כתובות לאחר הפגישה.',
-      timeline: 'פגישה אחת, מסמך סיכום תוך שבוע.',
       start: 'יצירת קשר עם פרטי הפרויקט.',
     },
   ],
@@ -290,7 +285,7 @@ export const projects: ProjectsContent = {
     {
       id: 'house-hasharon',
       name: 'בית פרטי בשרון',
-      metadata: 'כפר שמריהו, בתכנון',
+      metadata: 'שרון, בתכנון',
       label: { text: 'בתכנון', variant: 'in-progress' },
       coverAlt: 'הדמיה של כניסה לבית פרטי',
       description:

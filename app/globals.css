@@ -125,3 +125,19 @@
     opacity: 0;
   }
 }
+
+/* ─── Modal cell shadow (Wave M) ─────────────────────────── */
+/* Used by the SelectedProjects Lightbox overlay grid. Desktop default */
+/* matches OVERLAY_SHADOW (used by the card view's caption visual);    */
+/* at iw≤480 the shadow deepens so bone-paper cells stay isolated      */
+/* against the bone modal surface — audit Priority 1 #2.               */
+
+.modal-cell-shadow {
+  filter: drop-shadow(0 4px 16px rgba(43, 36, 32, 0.18));
+}
+
+@media (max-width: 480px) {
+  .modal-cell-shadow {
+    filter: drop-shadow(0 6px 24px rgba(43, 36, 32, 0.22));
+  }
+}

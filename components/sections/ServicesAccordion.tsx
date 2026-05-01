@@ -21,7 +21,6 @@ const revealItem = {
 
 const PANEL_LABELS = {
   included: 'כולל',
-  timeline: 'משך זמן משוער',
   start: 'איך מתחילים',
 } as const
 
@@ -139,13 +138,6 @@ export function ServicesAccordion({ eyebrow, items }: ServicesContent) {
                           {PANEL_LABELS.included}
                         </p>
                         <p className="font-serif text-body-l text-espresso">{item.included}</p>
-                      </div>
-
-                      <div>
-                        <p className="text-small text-taupe tracking-[0.08em] mb-3">
-                          {PANEL_LABELS.timeline}
-                        </p>
-                        <p className="font-serif text-body-l text-espresso">{item.timeline}</p>
                       </div>
 
                       <div>

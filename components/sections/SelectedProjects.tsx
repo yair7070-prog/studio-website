@@ -198,10 +198,8 @@ function Lightbox({ project, onClose }: { project: ProjectItem; onClose: () => v
               return (
                 <div key={key} className="bg-bone p-6 flex items-center justify-center">
                   <div
-                    style={{
-                      transform: `rotate(${rotation}deg)`,
-                      filter: OVERLAY_SHADOW,
-                    }}
+                    className="modal-cell-shadow"
+                    style={{ transform: `rotate(${rotation}deg)` }}
                   >
                     <Image
                       src={asset.src}
@@ -228,7 +226,7 @@ function Lightbox({ project, onClose }: { project: ProjectItem; onClose: () => v
         )}
         {project.id === 'apartment-raanana' && (
           <p className="mt-3 text-start font-serif text-body-m text-walnut tracking-[0.06em]">
-            לפני · 2024 — הושלם · 2025
+            לפני · 2024 — הושלם · 2024
           </p>
         )}
       </motion.div>
@@ -395,7 +393,7 @@ export function SelectedProjects({ eyebrow, items }: ProjectsContent) {
                           )}
                           {item.id === 'apartment-raanana' && (
                             <p className="mt-4 md:mt-6 text-start font-serif text-body-m text-walnut tracking-[0.06em]">
-                              לפני · 2024 — הושלם · 2025
+                              לפני · 2024 — הושלם · 2024
                             </p>
                           )}
                         </div>
