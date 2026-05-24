@@ -1,16 +1,28 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
-import { motion, useReducedMotion } from 'framer-motion'
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import { HeroScrollSequence } from '@/components/sections/HeroScrollSequence'
 import type { HeroContent } from '@/lib/content/home'
 
 const EASE = [0.22, 0.61, 0.36, 1] as const
+const EXPO_OUT = [0.16, 1, 0.3, 1] as const
 
 export function Hero({ positioning, cta, imageAlt }: HeroContent) {
   const reduced = useReducedMotion()
   const [ready, setReady] = useState(false)
+  const heroRef = useRef<HTMLElement>(null)
+
+  // Desktop: 1.5vh runway pins the inner sticky element for ~0.5vh of effective
+  // scroll, mapping linearly to video.currentTime. Mobile: no pinning; outer
+  // is 100svh and the video plays as an autoplay loop instead.
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ['start start', 'end end'],
+  })
+
+  const contentY = useTransform(scrollYProgress, [0, 0.5], ['0px', '-48px'])
 
   useEffect(() => {
     if (reduced) { setReady(true); return }
@@ -26,21 +38,23 @@ export function Hero({ positioning, cta, imageAlt }: HeroContent) {
 
   return (
     <section
-      className="relative h-[100svh] bg-mushroom"
+      ref={heroRef}
+      className="relative h-[100svh] bg-mushroom md:h-[150svh]"
       aria-label={imageAlt}
     >
-      <div className="h-full overflow-hidden">
+      <div className="h-[100svh] overflow-hidden md:sticky md:top-0">
         {/*
           Layer order (bottom → top):
-          1. Hero video — full-bleed autoplay loop
+          1. Hero video — desktop scroll-scrub, mobile autoplay loop
           2. Radial gradient — atmospheric depth
           3. SVG grain — paper quality
           4. UI chrome (logomark, content, scroll indicator)
           (Bottom gradient lives inside HeroScrollSequence)
         */}
 
-        {/* ── 1. Hero video — autoplay loop ──────────────────────────── */}
+        {/* ── 1. Hero video ──────────────────────────────────────────── */}
         <HeroScrollSequence
+          scrollYProgress={scrollYProgress}
           alt="הדמיה של סלון בסגנון עיצוב פנים יוקרה ישראלי — ספה מבוקלה קרם, שולחן סלון מטרוורטין, קיר פלסטר וחלון זכוכית עם נוף לעיר"
         />
 
@@ -95,15 +109,16 @@ export function Hero({ positioning, cta, imageAlt }: HeroContent) {
           </motion.div>
         </div>
 
-        {/* ── Content block — bottom-start (right in RTL) ─────────────── */}
+        {/* ── Content block — bottom-start (right in RTL) + scroll parallax ── */}
         <motion.div
           className="absolute bottom-0 start-0 ps-[8vw] pb-[8vw] md:ps-[6vw] md:pb-[6vw] max-w-[42rem]"
+          style={reduced ? {} : { y: contentY }}
         >
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.6, delay: 0.6, ease: EASE }}
-            className="font-serif text-display-xl text-bone mb-8"
+            initial={{ opacity: 0, y: 24, letterSpacing: '0.02em' }}
+            animate={ready ? { opacity: 1, y: 0, letterSpacing: '0em' } : { opacity: 0, y: 24, letterSpacing: '0.02em' }}
+            transition={{ duration: 1.2, delay: 0.4, ease: EXPO_OUT }}
+            className="font-serif font-bold text-display-xl text-bone mb-8"
           >
             {positioning}
           </motion.h1>

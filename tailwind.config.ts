@@ -20,8 +20,8 @@ const config: Config = {
         bronze:   '#7D5E3C',
       },
       fontFamily: {
-        serif:     ['var(--font-serif-he)', 'Georgia', 'serif'],
-        sans:      ['var(--font-sans-he)', 'system-ui', 'sans-serif'],
+        serif:     ['var(--font-assistant)', 'system-ui', 'sans-serif'],
+        sans:      ['var(--font-assistant)', 'system-ui', 'sans-serif'],
         latin:     ['var(--font-latin-serif)', 'Georgia', 'serif'],
         latinSans: ['var(--font-latin-sans)', 'system-ui', 'sans-serif'],
       },

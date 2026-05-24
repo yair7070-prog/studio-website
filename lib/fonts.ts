@@ -1,22 +1,11 @@
+import { Assistant } from 'next/font/google'
 import localFont from 'next/font/local'
 
-export const davidLibre = localFont({
-  src: [
-    { path: '../public/fonts/david-libre-400.woff2', weight: '400', style: 'normal' },
-  ],
-  variable: '--font-serif-he',
+export const assistant = Assistant({
+  subsets: ['hebrew', 'latin'],
+  weight: ['300', '400', '700'],
+  variable: '--font-assistant',
   display: 'swap',
-  preload: true,
-})
-
-export const assistant = localFont({
-  src: [
-    { path: '../public/fonts/assistant-300.woff2', weight: '300', style: 'normal' },
-    { path: '../public/fonts/assistant-400.woff2', weight: '400', style: 'normal' },
-  ],
-  variable: '--font-sans-he',
-  display: 'swap',
-  preload: true,
 })
 
 export const cormorantGaramond = localFont({

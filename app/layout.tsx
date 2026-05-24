@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { davidLibre, assistant, cormorantGaramond, inter } from '@/lib/fonts'
+import { assistant, cormorantGaramond, inter } from '@/lib/fonts'
 import { IntroLoader }    from '@/components/brand/IntroLoader'
 import { Cursor }         from '@/components/ui/Cursor'
 import { ScrollProgress } from '@/components/ui/ScrollProgress'
@@ -58,7 +58,7 @@ export default function RootLayout({
     <html
       lang="he"
       dir="rtl"
-      className={`${davidLibre.variable} ${assistant.variable} ${cormorantGaramond.variable} ${inter.variable}`}
+      className={`${assistant.variable} ${cormorantGaramond.variable} ${inter.variable}`}
     >
       <head>
         <script
