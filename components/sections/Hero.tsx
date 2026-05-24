@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import Image from 'next/image'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
-import Logomark from '@/components/brand/Logomark'
 import { HeroScrollSequence } from '@/components/sections/HeroScrollSequence'
 import type { HeroContent } from '@/lib/content/home'
 
@@ -110,12 +110,14 @@ export function Hero({ positioning, cta, imageAlt }: HeroContent) {
             animate={ready ? { opacity: 1 } : { opacity: 0 }}
             transition={{ duration: 0.6, delay: 0.3, ease: EASE }}
           >
-            <div className="md:hidden">
-              <Logomark size={64} priority applyFilter />
-            </div>
-            <div className="hidden md:block">
-              <Logomark size={80} priority applyFilter />
-            </div>
+            <Image
+              src="/assets/brand/aw-logo.png"
+              alt="a.w interior design — Adi Weinstein"
+              width={500}
+              height={500}
+              priority
+              className="w-auto h-12 md:h-16 lg:h-20"
+            />
             <span className="sr-only">a.w interior design — Adi Weinstein</span>
           </motion.div>
         </div>

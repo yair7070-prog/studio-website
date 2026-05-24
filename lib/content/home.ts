@@ -384,6 +384,7 @@ export const projects: ProjectsContent = {
       id: 'apartment-raanana',
       name: 'דירה ברעננה',
       metadata: 'רעננה, הושלם 2024',
+      label: { text: '2024', variant: 'completed' },
       coverAlt: 'סלון דירה מעוצבת ברעננה',
       description:
         'דירת חמישה חדרים. עבודה מול זוג צעיר עם ילדים, דגש על פרקטיות, טקסטורות חמות, וחללים גמישים לשינוי לאורך השנים.',

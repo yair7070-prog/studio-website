@@ -63,6 +63,7 @@ function TrackCard({ track }: { track: ServiceTrack }) {
       {/* CTA — anchors to FinalCTA's #lead-form */}
       <a
         href="#lead-form"
+        aria-label={`לפרטים על המסלול ${track.title}`}
         className="self-start inline-block mt-8 px-6 py-3 border border-walnut text-small font-serif text-walnut tracking-[0.08em] hover:bg-walnut hover:text-bone transition-colors duration-300 ease-paper focus:outline-none focus-visible:ring-2 focus-visible:ring-walnut focus-visible:ring-offset-2 focus-visible:ring-offset-sand cursor-pointer"
       >
         לפרטים נוספים
