@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import { HeroScrollSequence } from '@/components/sections/HeroScrollSequence'
 import type { HeroContent } from '@/lib/content/home'
 
@@ -11,18 +11,6 @@ const EASE = [0.22, 0.61, 0.36, 1] as const
 export function Hero({ positioning, cta, imageAlt }: HeroContent) {
   const reduced = useReducedMotion()
   const [ready, setReady] = useState(false)
-  const heroRef = useRef<HTMLElement>(null)
-
-  // Outer 300vh container drives scroll progress for the full sequence.
-  // 'end end' = section bottom at viewport bottom = 200vh of effective scroll
-  // before the hero releases and About comes into view.
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ['start start', 'end end'],
-  })
-
-  // Parallax completes at 50% so text is settled well before deconstruction peaks
-  const contentY = useTransform(scrollYProgress, [0, 0.5], ['0px', '-48px'])
 
   useEffect(() => {
     if (reduced) { setReady(true); return }
@@ -37,37 +25,22 @@ export function Hero({ positioning, cta, imageAlt }: HeroContent) {
   }, [reduced])
 
   return (
-    /*
-      Outer container: tall enough to give the sticky inner ample scroll runway.
-      - Desktop (md+): 300vh → ~200vh of pinned scroll before releasing
-      - Mobile: h-screen → normal single-viewport hero, no pinning
-      bg-mushroom on the outer prevents any flash when the sticky inner releases.
-    */
     <section
-      ref={heroRef}
-      className="relative h-screen bg-mushroom md:h-[300vh]"
+      className="relative h-[100svh] bg-mushroom"
       aria-label={imageAlt}
     >
-      {/*
-        Sticky inner: pins to viewport top for the full 300vh scroll range.
-        overflow-hidden must be on THIS element, not the outer section
-        (position:sticky breaks if an ancestor has overflow:hidden).
-        - Desktop: sticky top-0, 100svh tall
-        - Mobile: normal flow, 100svh tall (same visuals, no pinning)
-      */}
-      <div className="h-[100svh] overflow-hidden md:sticky md:top-0">
+      <div className="h-full overflow-hidden">
         {/*
           Layer order (bottom → top):
-          1. Hero image — full-bleed, scroll-linked sequence
+          1. Hero video — full-bleed autoplay loop
           2. Radial gradient — atmospheric depth
           3. SVG grain — paper quality
           4. UI chrome (logomark, content, scroll indicator)
           (Bottom gradient lives inside HeroScrollSequence)
         */}
 
-        {/* ── 1. Hero image — scroll-linked deconstruction sequence ─── */}
+        {/* ── 1. Hero video — autoplay loop ──────────────────────────── */}
         <HeroScrollSequence
-          scrollYProgress={scrollYProgress}
           alt="הדמיה של סלון בסגנון עיצוב פנים יוקרה ישראלי — ספה מבוקלה קרם, שולחן סלון מטרוורטין, קיר פלסטר וחלון זכוכית עם נוף לעיר"
         />
 
@@ -122,10 +95,9 @@ export function Hero({ positioning, cta, imageAlt }: HeroContent) {
           </motion.div>
         </div>
 
-        {/* ── Content block — bottom-start (right in RTL) + scroll parallax */}
+        {/* ── Content block — bottom-start (right in RTL) ─────────────── */}
         <motion.div
           className="absolute bottom-0 start-0 ps-[8vw] pb-[8vw] md:ps-[6vw] md:pb-[6vw] max-w-[42rem]"
-          style={reduced ? {} : { y: contentY }}
         >
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
