@@ -9,11 +9,8 @@ interface Props {
   alt: string
 }
 
-const TOTAL = 192
-
-function frameSrc(n: number) {
-  return `/hero-frames/frame_${String(n).padStart(3, '0')}.webp`
-}
+const VIDEO_SRC = '/assets/hero/hero-transformation.mp4'
+const POSTER_SRC = '/assets/hero/hero-poster.jpg'
 
 type Mode = 'mobile' | 'reduced' | 'sequence'
 
@@ -34,9 +31,8 @@ export function HeroScrollSequence({ scrollYProgress, alt }: Props) {
   // no Framer Motion scroll state). After mount: real mode is detected.
   const [mounted, setMounted] = useState(false)
   const [mode, setMode] = useState<Mode>('sequence')
-  const imgRef = useRef<HTMLImageElement>(null)
+  const videoRef = useRef<HTMLVideoElement>(null)
 
-  // All hooks called unconditionally at top level (React rules of hooks)
   useEffect(() => { setMounted(true) }, [])
 
   useEffect(() => {
@@ -46,49 +42,43 @@ export function HeroScrollSequence({ scrollYProgress, alt }: Props) {
     setMode(mobile ? 'mobile' : reduced ? 'reduced' : 'sequence')
   }, [mounted])
 
-  // Preload first 30 visible frames (001→030)
+  // Drive video.currentTime from scroll position (desktop only).
+  // Waits for loadedmetadata so video.duration is finite before scrubbing.
   useEffect(() => {
     if (!mounted || mode !== 'sequence') return
-    for (let i = 1; i <= 30; i++) {
-      const img = new Image()
-      img.src = frameSrc(i)
-    }
-  }, [mounted, mode])
+    const video = videoRef.current
+    if (!video) return
 
-  // Lazy-preload remaining frames (031→192) once the page settles
-  useEffect(() => {
-    if (!mounted || mode !== 'sequence') return
-    const load = () => {
-      for (let i = 31; i <= TOTAL; i++) {
-        const img = new Image()
-        img.src = frameSrc(i)
-      }
-    }
-    if (typeof (window as any).requestIdleCallback === 'function') {
-      const id: number = (window as any).requestIdleCallback(load, { timeout: 3000 })
-      return () => (window as any).cancelIdleCallback(id)
-    }
-    const id = setTimeout(load, 2000)
-    return () => clearTimeout(id)
-  }, [mounted, mode])
+    let unsubscribe: (() => void) | null = null
 
-  // Drive frame swaps from scroll position
-  useEffect(() => {
-    if (!mounted || mode !== 'sequence') return
-    return scrollYProgress.on('change', (v) => {
-      const n = Math.max(1, Math.min(TOTAL, Math.round(1 + v * (TOTAL - 1))))
-      if (imgRef.current) imgRef.current.src = frameSrc(n)
-    })
+    const startScrubbing = () => {
+      unsubscribe = scrollYProgress.on('change', (v) => {
+        const dur = video.duration
+        if (!Number.isFinite(dur) || dur <= 0) return
+        video.currentTime = Math.max(0, Math.min(dur, v * dur))
+      })
+    }
+
+    if (video.readyState >= 1) {
+      startScrubbing()
+    } else {
+      video.addEventListener('loadedmetadata', startScrubbing, { once: true })
+    }
+
+    return () => {
+      if (unsubscribe) unsubscribe()
+      video.removeEventListener('loadedmetadata', startScrubbing)
+    }
   }, [scrollYProgress, mounted, mode])
 
   // ── Before mount ────────────────────────────────────────────────────────────
-  // Renders identically on server and client first-paint.
-  // next/image with priority adds <link rel="preload"> for frame_001 (LCP hint).
+  // Renders identically on server and client first-paint. Poster image is
+  // the LCP candidate and matches the video's poster attribute exactly.
   if (!mounted) {
     return (
       <div className="absolute inset-0 bg-mushroom">
         <NextImage
-          src={frameSrc(1)}
+          src={POSTER_SRC}
           alt={alt}
           fill
           priority
@@ -102,34 +92,40 @@ export function HeroScrollSequence({ scrollYProgress, alt }: Props) {
     )
   }
 
-  // ── After mount ─────────────────────────────────────────────────────────────
-
-  // Mobile: static hero image, no scroll sequence
-  if (mode === 'mobile') {
+  // ── Reduced motion: static poster, no playback ──────────────────────────────
+  if (mode === 'reduced') {
     return (
       <div className="absolute inset-0 bg-mushroom">
         <NextImage
-          src="/hero.webp"
+          src={POSTER_SRC}
           alt={alt}
           fill
           priority
+          unoptimized
           fetchPriority="high"
           sizes="100vw"
           className="object-cover object-center"
-          quality={85}
         />
         <Gradient />
       </div>
     )
   }
 
-  // Reduced motion: show the resolved final frame statically
-  if (mode === 'reduced') {
+  // ── Mobile: autoplay loop, no scroll-link ───────────────────────────────────
+  // Touch-scroll scrubbing of currentTime stutters on iOS Safari and Android
+  // Chrome; autoplay loop avoids the issue and keeps the motion intent.
+  if (mode === 'mobile') {
     return (
       <div className="absolute inset-0 bg-mushroom">
-        <img
-          src={frameSrc(1)}
-          alt={alt}
+        <video
+          src={VIDEO_SRC}
+          poster={POSTER_SRC}
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          aria-label={alt}
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
         <Gradient />
@@ -137,14 +133,17 @@ export function HeroScrollSequence({ scrollYProgress, alt }: Props) {
     )
   }
 
-  // Scroll sequence: plain <img> whose src is updated on each scroll tick.
-  // frame_001 is already cached from the pre-mount NextImage preload above.
+  // ── Desktop: scroll-linked scrubbing ────────────────────────────────────────
   return (
     <div className="absolute inset-0 bg-mushroom">
-      <img
-        ref={imgRef}
-        src={frameSrc(1)}
-        alt={alt}
+      <video
+        ref={videoRef}
+        src={VIDEO_SRC}
+        poster={POSTER_SRC}
+        muted
+        playsInline
+        preload="auto"
+        aria-label={alt}
         className="absolute inset-0 w-full h-full object-cover object-center"
       />
       <Gradient />
